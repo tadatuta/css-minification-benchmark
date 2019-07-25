@@ -1,0 +1,4222 @@
+/* ../../node_modules/islands/common.blocks/pointerevents/pointerevents.css begin */
+[touch-action=auto] {
+    -ms-touch-action: auto;
+    touch-action: auto;
+}
+
+[touch-action=pan-y] {
+    -ms-touch-action: pan-y;
+    touch-action: pan-y;
+}
+
+[touch-action=pan-x] {
+    -ms-touch-action: pan-x;
+    touch-action: pan-x;
+}
+
+[touch-action="pan-x pan-y"],
+[touch-action="pan-y pan-x"] {
+    -ms-touch-action: pan-x pan-y;
+    touch-action: pan-x pan-y;
+}
+
+/* ../../node_modules/islands/common.blocks/pointerevents/pointerevents.css end */
+/* ../../node_modules/islands/common.blocks/button2/button2.css begin */
+/**
+ * 1. Значения padding и margin каждый браузер выставляет по-своему – сбрасываем в ноль.
+ * 2. Не должно быть возможности выделить контент кнопки, в т.ч. кнопки-ссылки.
+ * 3. У содержимого кнопок-ссылок не должно быть подчеркивания.
+ * 4. Кнопка не предполагает многострочного содержимого.
+ * 5. Чтобы FF под MacOS не делал blur после программного выставления фокуса по mousedown.
+ *    Подробности: http://jsfiddle.net/mishaberezin/892yppts/10/.
+ * 6. Для кнопок-ссылок.
+ * 7. Убираем нативную подсветку на iOS и Android.
+ * 8. В IE по дефолту hidden, в остальных браузерах visible, требуется нормализация.
+ *    В пользу visible, т.к. мы используем тень для отображения фокуса.
+ * 9. Такой сброс стилей нужен для всех тем.
+ * 10. Сбрасываем браузерные стили для кнопок, в особенности для link.
+ */
+.button2 {
+    display: inline-block; /*6*/
+    overflow: visible; /*8*/
+
+    -moz-box-sizing: border-box;
+
+    box-sizing: border-box;
+    margin: 0; /*1*/
+    padding: 0; /*1*/
+
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -moz-user-focus: ignore; /*5*/
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; /*2*/
+    text-align: center; /*10*/
+    white-space: nowrap; /*4*/
+    text-decoration: none; /*3*/
+
+    background: transparent; /*9*/
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /*7*/
+
+    -ms-touch-action: manipulation;
+
+    touch-action: manipulation;
+}
+
+/**
+ * Кнопка не должна реагировать на события мыши, если имеет атрибут disabled.
+ * Нативная поддержка атрибута disabled для ссылок есть только в IE.
+ * В других браузерах схожее поведение дает свойство pointer-events:none.
+ *
+ * NB:
+ * - Фикс не избавляет от необходимости удалять ссылку из taborder.
+ */
+.button2_disabled_yes {
+    pointer-events: none;
+}
+
+/**
+ * В FF 4+ у содержимого кнопки есть внутренняя обводка, которая используется для
+ * индикации фокуса на кнопках с измененными css-свойствами border или background.
+ * Обводка влияет на размеры, для нормализации с другими браузерами ее нужно убрать.
+ * Подробности: http://stackoverflow.com/questions/8859908.
+ */
+.button2::-moz-focus-inner {
+    padding: 0;
+
+    border: 0;
+}
+
+.button2:before {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    content: '';
+}
+
+/* ../../node_modules/islands/common.blocks/button2/button2.css end */
+/* ../../node_modules/islands/desktop.blocks/button2/button2.css begin */
+.button2 {
+    cursor: pointer;
+}
+
+.button2_disabled_yes {
+    cursor: default;
+}
+
+/* ../../node_modules/islands/desktop.blocks/button2/button2.css end */
+/* ../../blocks-common/button2/button2.styl begin */
+.button2 {
+  font-family: inherit;
+  position: relative;
+  z-index: 0;
+  transition: color 0.15s ease-out, -webkit-transform 0.1s linear;
+  transition: transform 0.1s linear, color 0.15s ease-out;
+  transition: transform 0.1s linear, color 0.15s ease-out, -webkit-transform 0.1s linear;
+  border: 0;
+  border-radius: 4px;
+  outline: 0;
+  background: transparent;
+  text-align: center;
+}
+.button2:before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  content: '';
+  transition: background 0.15s linear, border-color 0.15s ease-out;
+  border-radius: 4px;
+  background-clip: padding-box;
+}
+.button2_hidden_yes {
+  display: none;
+}
+.button2.button2_pressed_yes {
+  -webkit-transform: scale(0.96);
+  transform: scale(0.96);
+}
+.button2__text-icon {
+  margin-right: 5px;
+}
+
+/* ../../blocks-common/button2/button2.styl end */
+/* ../../node_modules/islands/common.blocks/button2/__text/button2__text.css begin */
+/**
+ * 1. В IE9+ с помощью position:relative у <button> лечится супер эффект "нажимания".
+ *    Подробнее: http://stackoverflow.com/questions/6744406;
+ * 2. В IE8 нужно, чтобы элемент приобрел "layout" и применялись фильтры прозрачности.
+ *    Сделано на common для однообразности.
+ * 3. Если не прибить resize в Safari 8 у __text появляется "уголочек".
+ *    http://jing.yandex-team.ru/files/karamadjong/2015-03-18_1319.png
+ * 4. Устраняет проблему с mouseover/mouseout внутри кнопки.
+ */
+.button2__text {
+    position: relative; /*1*/
+
+    display: inline-block; /*2*/
+
+    resize: none; /*3*/
+    white-space: nowrap;
+    pointer-events: none; /*4*/
+}
+
+/* ../../node_modules/islands/common.blocks/button2/__text/button2__text.css end */
+/* ../../node_modules/islands/common.blocks/b-page/b-page.css begin */
+/**
+ * 1. Нужно для попапов в react, где b-page вешается не на body.
+ */
+body {
+    margin: 0;
+}
+
+.b-page__body {
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+/*
+ * 1. https://st.yandex-team.ru/ISLCOMPONENTS-1653
+ * Hack for Ya.Bro on iOS 7-8 for force pointer events listening on BODY.
+ *
+ * 2. https://st.yandex-team.ru/ISL-2147
+ * Отключение выделения страницы при касании
+ */
+.i-ua_platform_ios.b-page__body {
+    cursor: pointer; /* (1) */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* (2) */
+}
+
+/* ../../node_modules/islands/common.blocks/b-page/b-page.css end */
+/* ../../node_modules/islands/desktop.blocks/b-page/b-page.css begin */
+.b-page__body {
+    margin: 0;
+
+    font-size: .8em;
+
+    color: #000;
+    background: #fff;
+}
+
+/* ../../node_modules/islands/desktop.blocks/b-page/b-page.css end */
+/* ../../blocks-common/b-page/b-page.styl begin */
+.i-ua_platform_ios.b-page__body {
+  cursor: auto;
+}
+
+/* ../../blocks-common/b-page/b-page.styl end */
+/* ../../blocks-deskpad/b-page/b-page.styl begin */
+html {
+  height: 100%;
+}
+.b-page__body {
+  height: 100%;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ../../blocks-deskpad/b-page/b-page.styl end */
+/* ../../blocks-desktop/b-page/b-page.styl begin */
+.b-page__body {
+  font-size: 13px;
+  line-height: 1.154;
+}
+.b-page.b-page_js_inited.b-page_overflow_hidden {
+  overflow: hidden;
+}
+.b-page_offset_top {
+  padding-top: 32px;
+}
+.b-page_change_yes {
+  will-change: padding-top;
+  transition: padding-top 0.3s 0.1s ease-in-out;
+}
+
+/* ../../blocks-desktop/b-page/b-page.styl end */
+/* ../../blocks-desktop/b-page/_initial-scroll/b-page_initial-scroll_yes.styl begin */
+/* Для Шапки в pre-search показываем скролл изначально, чтобы шапка не прыгала после загрузки выдачи */
+.b-page_initial-scroll_yes {
+  overflow-y: scroll;
+}
+/*
+    После того, как страница загрузилась выставляем скролл в auto.
+    В таком случае страница прыгнет только в случае, если нет результатов. Т.е. в гораздо более редких случаях.
+*/
+.b-page_initial-scroll_yes.b-page_js_inited {
+  overflow-y: auto;
+}
+/* Убирает скролл */
+.b-page_initial-scroll_yes.b-page_js_inited.b-page_overflow_yes {
+  overflow: hidden;
+}
+
+/* ../../blocks-desktop/b-page/_initial-scroll/b-page_initial-scroll_yes.styl end */
+/* ../../node_modules/@yandex-lego/serp-header/deskpad.blocks/serp-header/serp-header.css begin */
+.serp-header {
+    position: relative;
+
+    font-family: Arial, sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.serp-header__main {
+    display: table;
+
+    -moz-box-sizing: border-box;
+
+    box-sizing: border-box;
+    width: 100%;
+
+    table-layout: fixed;
+
+    box-shadow: none !important;
+}
+
+.serp-header_head-auth_yes .serp-header__main {
+    min-width: 600px;
+
+    table-layout: auto;
+}
+
+.serp-header__under {
+    position: relative;
+}
+
+.serp-header__logo,
+.serp-header__search2,
+.serp-header__nav {
+    display: table-cell;
+
+    height: 39px;
+
+    vertical-align: top;
+}
+
+.serp-header__logo .logo.logo_name_ys-en-87x35 {
+    background-position: 0 3px;
+}
+
+.serp-header_head-auth_yes .serp-header__search2 {
+    width: 100%;
+}
+
+.serp-header__nav {
+    padding-left: 20px;
+
+    text-align: right;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.serp-header .serp-user_enter_yes,
+.serp-header .serp-user_type_enter {
+    margin-top: 3px;
+    padding-left: 7px;
+
+    vertical-align: top;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/deskpad.blocks/serp-header/serp-header.css end */
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/serp-header/serp-header.css begin */
+.serp-header {
+    height: 55px;
+}
+
+.serp-header__main {
+    padding: 14px 16px 0;
+}
+
+.serp-header__wrapper {
+    position: fixed;
+
+    width: 100%;
+    /* В chrome на macos height рассчитывается в 56px,
+     * в chrome на windows – в 54px.
+     * Выставить 55px как в родительском контейнере,
+     * чтобы не было дырки между стрелкой и табиками. */
+    height: 55px;
+
+    background: #fff;
+
+    -webkit-transform: translateZ(0);
+
+    transform: translateZ(0);
+}
+
+.serp-header__search2 {
+    position: relative;
+    z-index: 1;
+
+    width: 638px;
+    padding-top: 1px;
+}
+
+.serp-header__nav {
+    position: relative;
+    z-index: 2;
+}
+
+.serp-header .notifier {
+    display: inline-block;
+
+    margin-right: 18px;
+}
+
+.serp-header .notifier__icon {
+    margin-top: 1px;
+}
+
+.serp-header__logo {
+    width: 100px;
+    min-width: 100px;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/serp-header/serp-header.css end */
+/* ../../blocks-deskpad/serp-header/serp-header.styl begin */
+.serp-header {
+  min-width: 600px;
+}
+
+/* ../../blocks-deskpad/serp-header/serp-header.styl end */
+/* ../../blocks-desktop/serp-header/serp-header.styl begin */
+.serp-header[class] {
+  z-index: 10005;
+}
+
+/* ../../blocks-desktop/serp-header/serp-header.styl end */
+/* ../../node_modules/islands/common.blocks/logo/logo.css begin */
+.logo {
+    display: inline-block;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+/**
+ * Чтобы логотип выводился при печати в Safari.
+ * Подробнее: http://stackoverflow.com/q/5949897#16322665
+ */
+@media print {
+    .logo {
+        -webkit-print-color-adjust: exact;
+    }
+}
+
+/* ../../node_modules/islands/common.blocks/logo/logo.css end */
+/* ../../node_modules/islands/common.blocks/logo/_name/logo_name_ys-ru-86x35.css begin */
+.logo_name_ys-ru-86x35 {
+    width: 86px;
+    height: 35px;
+
+    background-image: url("//yastatic.net/islands/_/RQWGFypkIRAzEbaERs_Sq8zKRzY.svg");
+}
+
+/* ../../node_modules/islands/common.blocks/logo/_name/logo_name_ys-ru-86x35.css end */
+/* ../../node_modules/islands/common.blocks/logo/_name/logo_name_ys-en-87x35.css begin */
+.logo_name_ys-en-87x35 {
+    width: 87px;
+    height: 35px;
+
+    background-image: url("//yastatic.net/islands/_/W5E8s3ZxddTVAc2-tL5VvgPy6ZY.svg");
+}
+
+/* ../../node_modules/islands/common.blocks/logo/_name/logo_name_ys-en-87x35.css end */
+/* ../../node_modules/islands/common.blocks/logo/_type/logo_type_link.css begin */
+/**
+ * 1. В ссылку может быть помещен текст для программ
+ *    экранного доступа и SEO. Визуально его нужно убрать.
+ */
+.logo_type_link {
+    overflow: hidden;
+
+    white-space: nowrap; /*1*/
+    text-indent: 100%; /*1*/
+
+    outline: 0;
+}
+
+/* ../../node_modules/islands/common.blocks/logo/_type/logo_type_link.css end */
+/* ../../node_modules/islands/common.blocks/z-index-group/z-index-group.css begin */
+.z-index-group_level_0 {
+    z-index: 1000;
+}
+
+.z-index-group_level_1 {
+    z-index: 2000;
+}
+
+.z-index-group_level_2 {
+    z-index: 3000;
+}
+
+.z-index-group_level_3 {
+    z-index: 4000;
+}
+
+.z-index-group_level_4 {
+    z-index: 5000;
+}
+
+.z-index-group_level_5 {
+    z-index: 6000;
+}
+
+.z-index-group_level_6 {
+    z-index: 7000;
+}
+
+.z-index-group_level_7 {
+    z-index: 8000;
+}
+
+.z-index-group_level_8 {
+    z-index: 9000;
+}
+
+.z-index-group_level_9 {
+    z-index: 10000;
+}
+
+/* ../../node_modules/islands/common.blocks/z-index-group/z-index-group.css end */
+/* ../../blocks-common/z-index-group/z-index-group.styl begin */
+.z-index-group_level_10 {
+  z-index: 11000;
+}
+.z-index-group_level_11 {
+  z-index: 12000;
+}
+.z-index-group_level_31 {
+  z-index: 32000;
+}
+
+/* ../../blocks-common/z-index-group/z-index-group.styl end */
+/* ../../node_modules/islands/common.blocks/service/service.css begin */
+.service {
+    position: relative;
+
+    display: inline-block;
+
+    margin: 0;
+
+    font-size: 15px;
+    line-height: 16px;
+    text-align: center;
+}
+
+/* ../../node_modules/islands/common.blocks/service/service.css end */
+/* ../../node_modules/@yandex-lego/serp-header/deskpad.blocks/service/service.css begin */
+.serp-navigation .service {
+    font-family: Arial, Helvetica, sans-serif;
+}
+.serp-navigation .service:focus {
+    outline: 0;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/deskpad.blocks/service/service.css end */
+/* ../../node_modules/islands/common.blocks/service/__name/service__name.css begin */
+.service__name {
+    display: block;
+}
+
+/* ../../node_modules/islands/common.blocks/service/__name/service__name.css end */
+/* ../../node_modules/islands/common.blocks/service/__url/service__url.css begin */
+.service__url {
+    display: inline-block;
+
+    text-decoration: none;
+}
+
+/* ../../node_modules/islands/common.blocks/service/__url/service__url.css end */
+/* ../../node_modules/islands/common.blocks/link/link.css begin */
+.link {
+    text-decoration: none;
+
+    outline: 0;
+
+    -ms-touch-action: manipulation;
+
+    touch-action: manipulation;
+}
+
+.link_disabled_yes {
+    pointer-events: none;
+}
+
+/* ../../node_modules/islands/common.blocks/link/link.css end */
+/* ../../node_modules/islands/desktop.blocks/link/link.css begin */
+.link {
+    cursor: pointer;
+}
+
+.link__icon {
+    transition: opacity .15s ease-out;
+}
+
+.link_disabled_yes {
+    cursor: default;
+}
+
+/* ../../node_modules/islands/desktop.blocks/link/link.css end */
+/* ../../node_modules/islands/common.blocks/link/__inner/link__inner.css begin */
+.link__inner {
+    color: inherit;
+}
+
+/* ../../node_modules/islands/common.blocks/link/__inner/link__inner.css end */
+/* ../../node_modules/islands/common.blocks/link/_theme/link_theme_normal.css begin */
+.link_theme_normal {
+    color: #04b;
+}
+
+.link_theme_normal.link_disabled_yes {
+    color: #ddd;
+}
+
+.link_theme_normal.link_disabled_yes .link__icon {
+    opacity: .5;
+}
+
+/* ../../node_modules/islands/common.blocks/link/_theme/link_theme_normal.css end */
+/* ../../node_modules/islands/deskpad.blocks/link/_theme/link_theme_normal.css begin */
+.utilityfocus.utilityfocus .link_theme_normal.link_focused_yes { /*1*/
+    outline: 2px solid #fc0;
+}
+
+/* ../../node_modules/islands/deskpad.blocks/link/_theme/link_theme_normal.css end */
+/* ../../node_modules/islands/desktop.blocks/link/_theme/link_theme_normal.css begin */
+.link_theme_normal.link_hovered_yes {
+    color: #c00;
+}
+
+.link_theme_normal.link_hovered_yes.link_disabled_yes {
+    color: #ddd;
+}
+
+/* ../../node_modules/islands/desktop.blocks/link/_theme/link_theme_normal.css end */
+/* ../../blocks-common/link/_theme/link_theme_normal.styl begin */
+.link_theme_normal {
+  color: #1a0dab;
+}
+.link_theme_normal:visited {
+  color: #551a8b;
+}
+
+/* ../../blocks-common/link/_theme/link_theme_normal.styl end */
+/* ../../blocks-deskpad/link/_theme/link_theme_normal.styl begin */
+.link_theme_normal:active {
+    color: #d00;
+}
+.link_theme_normal:visited:active {
+    color: #d00;
+}
+
+/* ../../blocks-deskpad/link/_theme/link_theme_normal.styl end */
+/* ../../blocks-desktop/link/_theme/link_theme_normal.styl begin */
+.link_theme_normal.link_hovered_yes {
+    color: #d00;
+}
+.link_theme_normal.link_hovered_yes:visited {
+    color: #d00;
+}
+
+/* ../../blocks-desktop/link/_theme/link_theme_normal.styl end */
+/* ../../node_modules/islands/common.blocks/link/_theme/link_theme_outer.css begin */
+.link_theme_outer {
+    color: #070;
+}
+
+.link_theme_outer.link_disabled_yes {
+    color: #ddd;
+}
+
+.link_theme_outer.link_disabled_yes .link__icon {
+    opacity: .5;
+}
+
+/* ../../node_modules/islands/common.blocks/link/_theme/link_theme_outer.css end */
+/* ../../node_modules/islands/deskpad.blocks/link/_theme/link_theme_outer.css begin */
+.utilityfocus .link_theme_outer.link_focused_yes {
+    outline: 2px solid #fc0;
+}
+
+/* ../../node_modules/islands/deskpad.blocks/link/_theme/link_theme_outer.css end */
+/* ../../node_modules/islands/desktop.blocks/link/_theme/link_theme_outer.css begin */
+.link_theme_outer.link_hovered_yes {
+    color: #c00;
+}
+
+.link_theme_outer.link_hovered_yes.link_disabled_yes {
+    color: #ddd;
+}
+
+/* ../../node_modules/islands/desktop.blocks/link/_theme/link_theme_outer.css end */
+/* ../../blocks-common/link/_theme/link_theme_outer.styl begin */
+.link_theme_outer {
+  color: #070;
+}
+
+/* ../../blocks-common/link/_theme/link_theme_outer.styl end */
+/* ../../blocks-desktop/link/_theme/link_theme_outer.styl begin */
+.link_theme_outer.link_hovered_yes {
+  color: #d00;
+}
+
+/* ../../blocks-desktop/link/_theme/link_theme_outer.styl end */
+/* ../../node_modules/islands/common.blocks/link/_theme/link_theme_black.css begin */
+.link_theme_black {
+    color: #000;
+}
+
+.link_theme_black.link_disabled_yes {
+    color: #ddd;
+}
+
+.link_theme_black.link_disabled_yes .link__icon {
+    opacity: .5;
+}
+
+/* ../../node_modules/islands/common.blocks/link/_theme/link_theme_black.css end */
+/* ../../node_modules/islands/deskpad.blocks/link/_theme/link_theme_black.css begin */
+.utilityfocus .link_theme_black.link_focused_yes {
+    outline: 2px solid #fc0;
+}
+
+/* ../../node_modules/islands/deskpad.blocks/link/_theme/link_theme_black.css end */
+/* ../../node_modules/islands/desktop.blocks/link/_theme/link_theme_black.css begin */
+.link_theme_black.link_hovered_yes {
+    color: #c00;
+}
+
+.link_theme_black.link_hovered_yes.link_disabled_yes {
+    color: #ddd;
+}
+
+/* ../../node_modules/islands/desktop.blocks/link/_theme/link_theme_black.css end */
+/* ../../blocks-common/link/_theme/link_theme_black.styl begin */
+.link_theme_black {
+  color: #000;
+}
+
+/* ../../blocks-common/link/_theme/link_theme_black.styl end */
+/* ../../blocks-desktop/link/_theme/link_theme_black.styl begin */
+.link_theme_black.link_hovered_yes {
+  color: #d00;
+}
+
+/* ../../blocks-desktop/link/_theme/link_theme_black.styl end */
+/* ../../node_modules/islands/common.blocks/link/_theme/link_theme_ghost.css begin */
+.link_theme_ghost {
+    color: #999;
+}
+
+.link_theme_ghost.link_disabled_yes {
+    color: #ddd;
+}
+
+.link_theme_ghost.link_disabled_yes .link__icon {
+    opacity: .5;
+}
+
+/* ../../node_modules/islands/common.blocks/link/_theme/link_theme_ghost.css end */
+/* ../../node_modules/islands/deskpad.blocks/link/_theme/link_theme_ghost.css begin */
+.utilityfocus .link_theme_ghost.link_focused_yes {
+    outline: 2px solid #fc0;
+}
+
+/* ../../node_modules/islands/deskpad.blocks/link/_theme/link_theme_ghost.css end */
+/* ../../node_modules/islands/desktop.blocks/link/_theme/link_theme_ghost.css begin */
+.link_theme_ghost.link_hovered_yes {
+    color: #000;
+}
+
+.link_theme_ghost.link_hovered_yes.link_disabled_yes {
+    color: #ddd;
+}
+
+/* ../../node_modules/islands/desktop.blocks/link/_theme/link_theme_ghost.css end */
+/* ../../blocks-desktop/link/_theme/link_theme_ghost.styl begin */
+.link_theme_ghost.link_hovered_yes {
+  color: #d00;
+}
+
+/* ../../blocks-desktop/link/_theme/link_theme_ghost.styl end */
+/* ../../blocks-deskpad/link/_theme/link_theme_minor.styl begin */
+.link_theme_minor {
+  color: #1a0dab;
+}
+.link_theme_minor:visited {
+  color: #551a8b;
+}
+
+/* ../../blocks-deskpad/link/_theme/link_theme_minor.styl end */
+/* ../../blocks-desktop/link/_theme/link_theme_minor.styl begin */
+.link_theme_minor.link_hovered_yes {
+  color: #d00;
+}
+
+/* ../../blocks-desktop/link/_theme/link_theme_minor.styl end */
+/* ../../blocks-common/link/_theme/link_theme_clear.styl begin */
+.link_theme_clear {
+  color: inherit;
+}
+
+/* ../../blocks-common/link/_theme/link_theme_clear.styl end */
+/* ../../blocks-common/link/_theme/link_theme_white.styl begin */
+.link_theme_white {
+  color: #fff;
+}
+
+/* ../../blocks-common/link/_theme/link_theme_white.styl end */
+/* ../../node_modules/islands/common.blocks/link/_theme/link_theme_pseudo.css begin */
+.link_theme_pseudo {
+    color: #04b;
+}
+
+.link_theme_pseudo.link_disabled_yes {
+    color: #ddd;
+}
+
+.link_theme_pseudo.link_disabled_yes .link__icon {
+    opacity: .5;
+}
+
+.link_theme_pseudo .link__inner {
+    border-bottom: 1px dotted; /* Цвет наследуется от текста. */
+}
+
+/* ../../node_modules/islands/common.blocks/link/_theme/link_theme_pseudo.css end */
+/* ../../node_modules/islands/deskpad.blocks/link/_theme/link_theme_pseudo.css begin */
+.utilityfocus .link_theme_pseudo.link_focused_yes {
+    outline: 2px solid #fc0;
+}
+
+/* ../../node_modules/islands/deskpad.blocks/link/_theme/link_theme_pseudo.css end */
+/* ../../node_modules/islands/desktop.blocks/link/_theme/link_theme_pseudo.css begin */
+.link_theme_pseudo.link_hovered_yes {
+    color: #c00;
+}
+
+.link_theme_pseudo.link_hovered_yes.link_disabled_yes {
+    color: #ddd;
+}
+
+/* ../../node_modules/islands/desktop.blocks/link/_theme/link_theme_pseudo.css end */
+/* ../../blocks-common/link/_nowrap/link_nowrap_yes.styl begin */
+.link_nowrap_yes {
+  white-space: nowrap;
+}
+
+/* ../../blocks-common/link/_nowrap/link_nowrap_yes.styl end */
+/* ../../blocks-common/link/_underline/link_underline_yes.styl begin */
+.link_underline_yes {
+  text-decoration: underline;
+}
+
+/* ../../blocks-common/link/_underline/link_underline_yes.styl end */
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/navigation/navigation.css begin */
+.serp-navigation {
+    position: relative;
+
+    min-height: 35px;
+}
+
+.navigation {
+    position: fixed;
+
+    overflow: hidden;
+
+    -moz-box-sizing: border-box;
+
+    box-sizing: border-box;
+    width: 100%;
+    height: 39px;
+    margin-bottom: 0;
+    padding-left: 116px;
+
+    background-color: #fff;
+    box-shadow: 0 1px rgba(0,0,0,.1);
+
+    -webkit-transform: translateZ(0);
+
+    transform: translateZ(0);
+}
+.navigation .navigation__region {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    max-height: 100%;
+}
+.navigation .navigation__item .service::before {
+    display: none;
+}
+.navigation .navigation__item,
+.navigation .navigation__more {
+    position: relative;
+
+    display: inline-block;
+
+    height: 100%;
+    padding: 0;
+
+    vertical-align: middle;
+
+    font-size: 14px;
+    line-height: 36px;
+}
+.navigation .navigation__item .service,
+.navigation .navigation__more .service {
+    display: block;
+
+    height: 40px;
+    padding: 0;
+
+    font-size: inherit;
+    line-height: inherit;
+}
+.navigation .navigation__item .service.navigation__more-label,
+.navigation .navigation__more .service.navigation__more-label {
+    padding: 0 8px;
+}
+.navigation .navigation__item .service__name,
+.navigation .navigation__more .service__name {
+    display: inherit;
+
+    padding: 0 4px;
+
+    font-size: inherit;
+    line-height: inherit;
+}
+.navigation .navigation__item .service__url,
+.navigation .navigation__more .service__url {
+    display: inherit;
+
+    margin: 0 4px;
+    padding: 0;
+
+    text-decoration: none;
+
+    color: #999;
+}
+.navigation .navigation__item .service__url:visited,
+.navigation .navigation__more .service__url:visited {
+    color: #999;
+}
+.navigation .navigation__item .service_hoverable_yes,
+.navigation .navigation__more .service_hoverable_yes {
+    color: #999;
+}
+.navigation .navigation__item .service__url .service__name:hover,
+.navigation .navigation__more .service__url .service__name:hover {
+    color: #c00;
+}
+.navigation .navigation__item_state_selected,
+.navigation .navigation__more_state_selected {
+    padding: 0;
+
+    font-weight: bold;
+}
+.navigation .navigation__item_state_selected .service__name,
+.navigation .navigation__more_state_selected .service__name {
+    position: relative;
+
+    display: inline;
+
+    margin: 0 8px;
+    padding: 0;
+}
+.navigation .navigation__item_state_selected .service__name::after,
+.navigation .navigation__more_state_selected .service__name::after {
+    position: absolute;
+    bottom: -13px;
+    left: 0;
+
+    display: block;
+
+    width: 100%;
+
+    content: '';
+
+    border-top: 3px solid #000;
+}
+.navigation .navigation__item_state_selected .service__url,
+.navigation .navigation__more_state_selected .service__url {
+    margin-right: 0;
+    margin-left: 0;
+
+    color: #000;
+}
+.navigation .navigation__item_state_selected .service__url:visited,
+.navigation .navigation__more_state_selected .service__url:visited,
+.navigation .navigation__item_state_selected .service__url .service__name:hover,
+.navigation .navigation__more_state_selected .service__url .service__name:hover {
+    color: #000;
+}
+.navigation .navigation__item_state_selected .service::before,
+.navigation .navigation__more_state_selected .service::before {
+    content: none;
+}
+.navigation .navigation__item_extra_hidden,
+.navigation .navigation__more_extra_hidden {
+    overflow: hidden;
+
+    width: 0;
+    padding: 0;
+}
+.navigation .navigation__item:first-child .service__url,
+.navigation .navigation__more:first-child .service__url {
+    margin-left: 0;
+}
+.navigation .navigation__item:first-child .service__name,
+.navigation .navigation__more:first-child .service__name {
+    margin-left: 2px;
+    padding-left: 0;
+}
+.navigation .navigation__more {
+    cursor: pointer;
+
+    opacity: 0;
+}
+.navigation .navigation__more .navigation__more-label:hover {
+    color: #c00;
+}
+.navigation.navigation_more-type_slide .navigation__item_extra_hidden + .navigation__more,
+.navigation.navigation_more-type_slide .navigation__item_extra_visible + .navigation__more {
+    display: inline-block;
+}
+.navigation.navigation_more-type_slide .navigation__item_extra_hidden + .navigation__more_visibility_hidden,
+.navigation.navigation_more-type_slide .navigation__item_extra_visible + .navigation__more_visibility_hidden {
+    display: none;
+}
+.navigation.navigation_more-type_slide.navigation_more-button_hidden .navigation__more,
+.navigation.navigation_more-type_slide.navigation_more-button_hidden .navigation__item_extra_hidden + .navigation__more,
+.navigation.navigation_more-type_slide.navigation_more-button_hidden .navigation__item_extra_visible + .navigation__more {
+    display: none;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/navigation/navigation.css end */
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/navigation/_more-type/navigation_more-type_slide.css begin */
+.navigation_more-type_slide .navigation__item_extra_hidden + .navigation__more,
+.navigation_more-type_slide .navigation__item_extra_visible + .navigation__more {
+    display: block;
+}
+.navigation_more-type_slide .navigation__more-label:hover {
+    color: #000;
+}
+.navigation_more-type_slide .navigation__item_extra_hidden,
+.navigation_more-type_slide .navigation__item_extra_visible,
+.navigation_more-type_slide .navigation__more {
+    overflow: hidden;
+
+    transition: opacity 0s, visibility 0s, height .08s;
+}
+.navigation_more-type_slide .navigation__item_extra_visible {
+    overflow: visible;
+}
+.navigation_more-type_slide .navigation__item_extra_hidden,
+.navigation_more-type_slide .navigation__more {
+    visibility: hidden;
+
+    padding: 0;
+
+    opacity: 0;
+
+    transition-duration: .3s, .3s, .1s;
+}
+.navigation_more-type_slide .navigation__item_extra_visible,
+.navigation_more-type_slide .navigation__more_visibility_visible {
+    visibility: visible;
+
+    opacity: 1;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/navigation/_more-type/navigation_more-type_slide.css end */
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/navigation/__item/navigation__item.css begin */
+.navigation__item .service__name {
+    font-size: 13px;
+    line-height: 36px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.navigation__item_state_selected .service {
+    z-index: 2;
+
+    opacity: 0;
+}
+
+.navigation__item_state_selected .navigation__item-over {
+    display: block;
+}
+
+.navigation__item_state_selected .service__name {
+    font-weight: 400;
+}
+
+.navigation__item:first-child .navigation__item-over {
+    text-align: left;
+}
+
+.navigation__item-over {
+    position: absolute;
+    top: 0;
+
+    display: none;
+
+    width: 100%;
+
+    text-align: center;
+}
+
+.navigation__item-over:before {
+    display: inline;
+
+    padding-bottom: 10px;
+
+    content: attr(data-name);
+
+    border-bottom: 3px solid;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/navigation/__item/navigation__item.css end */
+/* ../../node_modules/islands/common.blocks/search2/search2.css begin */
+.search2 {
+    display: inline-table;
+}
+
+/* ../../node_modules/islands/common.blocks/search2/search2.css end */
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/search2/search2.css begin */
+.serp-header .search2 {
+    max-width: 638px;
+    margin: 0;
+}
+
+.search2_buttons-outside_1 {
+    padding-right: 60px;
+}
+
+.search2_buttons-outside_2 {
+    padding-right: 110px;
+}
+
+@media (max-width: 700px) {
+    .serp-header .search2_buttons-outside_1,
+    .serp-header .search2_buttons-outside_2 {
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 930px) {
+    .serp-header .search2_buttons-outside_2 {
+        padding-right: 60px;
+    }
+}
+
+.serp-header .search2__input .input__control {
+    font-size: 18px;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/search2/search2.css end */
+/* ../../node_modules/islands/common.blocks/search2/__input/search2__input.css begin */
+.search2__input {
+    display: table-cell;
+
+    vertical-align: top; /* Чтобы выравнивать содержимое одинаково с содержимым .search2__button */
+}
+
+/* ../../node_modules/islands/common.blocks/search2/__input/search2__input.css end */
+/* ../../node_modules/@yandex-lego/serp-header/deskpad.blocks/search2/__input/search2__input.css begin */
+.serp-header .search2__input {
+    width: 100%;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/deskpad.blocks/search2/__input/search2__input.css end */
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/search2/__input/search2__input.css begin */
+.serp-header .search2__input {
+    position: relative;
+
+    height: 40px;
+}
+
+.serp-header:not(.serp-header_kids) .search2__input:after {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 2px;
+    margin-left: -2px;
+
+    content: '';
+
+    border: 2px solid #fc0;
+    border-left: none;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/search2/__input/search2__input.css end */
+/* ../../node_modules/islands/common.blocks/search2/__button/search2__button.css begin */
+.search2__button {
+    display: table-cell;
+}
+
+/* ../../node_modules/islands/common.blocks/search2/__button/search2__button.css end */
+/* ../../node_modules/islands/common.blocks/input/input.css begin */
+.input {
+    position: relative;
+
+    display: inline-block;
+
+    width: 100%;
+}
+
+/* .input_disabled_yes нужен на случай, если внутри будут ещё элементы, кроме контрола. */
+.input_disabled_yes,
+.input_disabled_yes .input__control {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* ../../node_modules/islands/common.blocks/input/input.css end */
+/* ../../node_modules/islands/desktop.blocks/input/input.css begin */
+.input_disabled_yes .input__box,
+.input_disabled_yes .input__control {
+    cursor: default;
+}
+
+/* ../../node_modules/islands/desktop.blocks/input/input.css end */
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/input/input.css begin */
+.input__settings,
+.input__voice-search,
+.input__button {
+    position: absolute;
+    top: -3px;
+    right: -154px;
+
+    width: 42px;
+    height: 42px;
+
+    cursor: pointer;
+
+    border-radius: 50%;
+    background-color: #e6e6e6;
+}
+
+.input_voice-search_yes .input__settings,
+.input_voice-search_yes .input__box:not(.input__box_cbir_yes) .input__cbir-button {
+    right: -204px;
+}
+
+.input__settings:hover,
+.input__voice-search:hover,
+.input__button:hover {
+    background-color: #dbdbdb;
+}
+
+.input__settings {
+    background-image: url("/static/web4/freeze/cRpWOVFEazl8wyn9pSRVJiwY4Jg.svg");
+    background-position: center;
+}
+
+@media (max-width: 700px) {
+    .input__settings,
+    .input__voice-search {
+        display: none;
+    }
+}
+
+@media (max-width: 930px) {
+    .input_voice-search_yes .input__settings {
+        display: none;
+    }
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/input/input.css end */
+/* ../../node_modules/islands/common.blocks/input/_theme/input_theme_normal.css begin */
+/*
+ * 1. Стили для _hovered прописаны здесь, а не на уровне desktop, чтобы избежать сложностей с порядком переопределения.
+ *    Стили для _focused_yes должны переопределять стили для _hovered_yes.
+ */
+
+.input_theme_normal,
+.input_theme_normal .input__control {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    color: #000;
+}
+
+.input_disabled_yes.input_theme_normal .input__control {
+    color: #aaa;
+    -webkit-text-fill-color: #aaa; /* https://st.yandex-team.ru/ISL-2132 Safari needs it to blend color properly */
+}
+
+.input_theme_normal .input__control::-webkit-input-placeholder {
+    color: #999;
+}
+
+.input_theme_normal .input__control::-moz-placeholder {
+    opacity: 1; /*В firefox полупрозрачный по умолчанию*/
+    color: #999;
+}
+
+.input_theme_normal .input__control:-ms-input-placeholder {
+    color: #999;
+}
+
+.input_theme_normal .input__hint {
+    color: #999;
+}
+
+.input_theme_normal .input__box:before {
+    border: 1px solid rgba(0,0,0,.2);
+    background-color: #fff;
+    background-clip: padding-box;
+}
+
+.input_theme_normal.input_hovered_yes .input__box:before /* 1 */ {
+    border-color: rgba(0,0,0,.3);
+}
+
+.input_theme_normal.input_focused_yes .input__box:before {
+    border: 2px solid #ffdb4d;
+}
+
+.input_theme_normal.input_disabled_yes .input__box:before {
+    border-width: 0;
+    background-color: rgba(0,0,0,.08);
+}
+
+/* ../../node_modules/islands/common.blocks/input/_theme/input_theme_normal.css end */
+/* ../../node_modules/islands/desktop.blocks/input/_theme/input_theme_normal.css begin */
+.input_theme_normal .input__box:before {
+    transition: .1s ease-out;
+    transition-property: border-color, border-width, background-color;
+}
+
+.input_theme_normal.input_type_textarea .input__box:before {
+    transition-property: border-color, border-width, top, left, right, bottom;
+}
+
+/* ../../node_modules/islands/desktop.blocks/input/_theme/input_theme_normal.css end */
+/* ../../blocks-common/input/_theme/input_theme_normal.styl begin */
+.input_theme_normal,
+.input_theme_normal .input__control {
+  font-family: inherit;
+}
+@media all and (min-width: 0) {
+  .input_theme_normal .input__box {
+    background: #fff;
+  }
+}
+
+/* ../../blocks-common/input/_theme/input_theme_normal.styl end */
+/* ../../blocks-deskpad/input/_theme/input_theme_normal.styl begin */
+/* SERP-29743 - заменить #000 на #333 везде */
+.input_theme_normal,
+.input_theme_normal .input__control {
+  color: #333;
+}
+
+/* ../../blocks-deskpad/input/_theme/input_theme_normal.styl end */
+/* ../../node_modules/islands/common.blocks/input/__box/input__box.css begin */
+/* Обертка для нативного инпута (__control) и очищающего крестика (__clear). */
+.input__box {
+    position: relative;
+
+    display: block;
+
+    -moz-box-sizing: border-box;
+
+    box-sizing: border-box;
+
+    cursor: text;
+}
+
+.input__box:before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    padding: 0;
+
+    content: '';
+
+    background-clip: padding-box;
+}
+
+/* ../../node_modules/islands/common.blocks/input/__box/input__box.css end */
+/* ../../blocks-desktop/input/__box/input__box.styl begin */
+.input__box {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ../../blocks-desktop/input/__box/input__box.styl end */
+/* ../../node_modules/islands/common.blocks/input/__control/input__control.css begin */
+.input__control {
+    position: relative;
+    z-index: 3;
+
+    -moz-box-sizing: border-box;
+
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    font-size: 100%;
+    vertical-align: top;
+
+    color: #000;
+    border: 0 solid transparent;
+    outline: 0;
+    background: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+    -webkit-appearance: none;
+}
+
+/* Лишние отступы у текста */
+.input__control::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/* Нативный крестик */
+.input__control::-webkit-search-cancel-button {
+    display: none;
+}
+
+.input__control::-ms-clear {
+    display: none;
+}
+
+/* Сбрасываем желтый background у инпутов при автозаполнении */
+.input__control:-webkit-autofill {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    background-clip: content-box;
+    -webkit-box-shadow: inset 0 0 0 50px #fff;
+    -webkit-text-fill-color: #000;
+}
+
+/* ../../node_modules/islands/common.blocks/input/__control/input__control.css end */
+/* ../../node_modules/islands/desktop.blocks/input/__control/input__control.css begin */
+.input__control::-webkit-input-placeholder {
+    -webkit-text-fill-color: #999;
+}
+
+/* ../../node_modules/islands/desktop.blocks/input/__control/input__control.css end */
+/* ../../blocks-common/input/__control/input__control.styl begin */
+/* TODO: убрать после SERP-34698 */
+.input__control {
+  text-overflow: clip;
+  border: 0 solid transparent;
+}
+
+/* ../../blocks-common/input/__control/input__control.styl end */
+/* ../../blocks-deskpad/input/__control/input__control.styl begin */
+.input .input__control:-webkit-autofill {
+  height: 1.4em;
+}
+
+/* ../../blocks-deskpad/input/__control/input__control.styl end */
+/* ../../blocks-desktop/input/__control/input__control.styl begin */
+.input .input__control:-webkit-autofill {
+  height: auto;
+}
+
+/* ../../blocks-desktop/input/__control/input__control.styl end */
+/* ../../node_modules/islands/common.blocks/input/__clear/input__clear.css begin */
+/* Позиционируется относительно input__box.
+ * Важно, чтобы правая граница элемента с очищающим крестиком
+ * совпадала с правой границей input__box, иначе появляется
+ * возможность кликнуть по правой границе input__box. */
+.input__clear {
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    right: 0;
+
+    visibility: hidden;
+
+    margin: 0;
+    padding: 0;
+
+    pointer-events: none;
+
+    opacity: 0;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+
+    transition: visibility 0s linear .1s, opacity .1s ease-out;
+}
+
+.input_disabled_yes .input__clear {
+    display: none;
+}
+
+.input_size_xs .input__clear,
+.input_size_s .input__clear {
+    background-image: url("//yastatic.net/islands/_/B8eOwa4HB-JnzSOAZiWnu0hWGAk.svg");
+}
+
+.input_size_m .input__clear {
+    background-image: url("//yastatic.net/islands/_/eS-nxtWWJ1LfBWLfd096swuFjH4.svg");
+}
+
+/* ../../node_modules/islands/common.blocks/input/__clear/input__clear.css end */
+/* ../../blocks-common/input/__clear/input__clear.styl begin */
+.input_size_l .input__clear {
+  background-image: url("/static/web4/freeze/kNNHdGrMmnePggKQWuru_0JAy_Y.svg");
+}
+
+/* ../../blocks-common/input/__clear/input__clear.styl end */
+/* ../../node_modules/islands/common.blocks/input/__clear/_visibility/input__clear_visibility_visible.css begin */
+.input__clear_visibility_visible {
+    visibility: visible;
+
+    cursor: pointer;
+    pointer-events: auto;
+
+    opacity: .3;
+
+    transition: opacity .1s ease-out;
+}
+
+/* ../../node_modules/islands/common.blocks/input/__clear/_visibility/input__clear_visibility_visible.css end */
+/* ../../node_modules/islands/desktop.blocks/input/__clear/_visibility/input__clear_visibility_visible.css begin */
+.input__clear_visibility_visible:hover {
+    opacity: .8;
+}
+
+/* ../../node_modules/islands/desktop.blocks/input/__clear/_visibility/input__clear_visibility_visible.css end */
+/* ../../node_modules/@yandex-lego/serp-header/deskpad.blocks/input/_settings-inside/input_settings-inside_yes.css begin */
+.input_settings-inside_yes .input__settings {
+    position: absolute;
+    z-index: 5;
+
+    cursor: pointer;
+
+    background-repeat: no-repeat;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/deskpad.blocks/input/_settings-inside/input_settings-inside_yes.css end */
+/* ../../blocks-desktop/input/_settings-inside/input_settings-inside_yes.styl begin */
+.input_settings-inside_yes .input__settings:hover {
+  opacity: 0.8;
+}
+
+/* ../../blocks-desktop/input/_settings-inside/input_settings-inside_yes.styl end */
+/* ../../node_modules/@yandex-lego/serp-header/deskpad.blocks/websearch-button/websearch-button.css begin */
+/**
+ * В большинстве своем скопировано из button_theme_websearch
+ * Причина - у текущей кнопки не нужны дефолты (size_m) и сейчас все по кнопке тянется в pre-search
+ * Можно будет вернуться к использованию темы после обновления до Lego v4.0.0 и выноса обычной кнопки в бандл
+ */
+.websearch-button {
+    display: inline-block;
+    overflow: hidden;
+
+    margin: 0;
+
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+
+    border: 0;
+    /* Прибиваем скругление в Chrome — https://www.chromestatus.com/feature/5743649186906112 */
+    border-radius: 0;
+    outline: 0;
+    background: transparent;
+}
+
+.websearch-button::-moz-focus-inner {
+    padding: 0;
+
+    border: 0;
+}
+
+.websearch-button__text {
+    position: relative;
+
+    display: inline-block;
+
+    -moz-box-sizing: border-box;
+
+    box-sizing: border-box;
+    width: 79px;
+    margin-right: 9px;
+    padding-left: 5px;
+
+    color: #000;
+    border-width: 2px 0;
+    border-style: solid;
+}
+
+.websearch-button:active .websearch-button__text {
+    border-color: #f2cf46;
+    background-color: #f2cf46;
+}
+
+.websearch-button__text:before {
+    position: absolute;
+
+    content: '';
+}
+
+.websearch-button__text:after {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: -1px;
+    left: -1px;
+
+    height: 100%;
+
+    content: '';
+
+    background: #fc0;
+}
+
+
+/* ../../node_modules/@yandex-lego/serp-header/deskpad.blocks/websearch-button/websearch-button.css end */
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/websearch-button/websearch-button.css begin */
+.websearch-button {
+    height: 40px;
+    padding: 0 4px 0 0;
+}
+
+.websearch-button__text {
+    height: 40px;
+
+    padding: 2px 0 2px 5px;
+
+    font: 16px/35px arial, sans-serif;
+
+    border: none;
+
+    background-color: #fc0;
+}
+
+.websearch-button__text:before {
+    top: 0;
+    right: -13px;
+
+    width: 13px;
+    height: 40px;
+
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='40'%3E%3Cpath fill='%23fc0' d='M0 0v40h.999c1.105 0 2.405-.809 2.897-1.792L13 20 3.896 1.792C3.401.802 2.1 0 1 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/websearch-button/websearch-button.css end */
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/input/_theme/input_theme_websearch2.css begin */
+.input_theme_websearch2 {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 40px;
+
+    border: 2px solid #fc0;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.input__ahead,
+.input_theme_websearch2 .input__box {
+    padding-right: 36px;
+}
+
+.input_theme_websearch2 .input__box:before {
+    border-radius: 2px;
+}
+
+.input_theme_websearch2 .input__control {
+    height: 36px;
+
+    font-family: inherit; /* Шрифт элементов формы не наследуется автоматически. */
+
+    border-right-width: 0;
+    border-left-width: 11px;
+}
+
+.input_theme_websearch2 .input__clear {
+    right: 0;
+
+    width: 36px;
+    height: 36px;
+
+    opacity: .2;
+    background-image: url("/static/web4/freeze/f0vM6kFiHLugimNeqhQEGoZgpUE.svg");
+}
+
+.input_theme_websearch2 .input__clear:hover {
+    opacity: .8;
+}
+
+.input_theme_websearch2 .input__cbir {
+    top: 0;
+
+    height: 36px;
+    margin-left: 2px;
+
+    line-height: 34px;
+}
+
+.input_theme_websearch2 .input__ahead-hint {
+    margin-left: -2px;
+
+    line-height: 36px;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/input/_theme/input_theme_websearch2.css end */
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/input/_empty/input_empty.css begin */
+.input_empty .input__ahead,
+.input_empty.input_theme_websearch2 .input__box {
+    padding-right: 0;
+}
+
+/* ../../node_modules/@yandex-lego/serp-header/desktop.blocks/input/_empty/input_empty.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2/suggest2.css begin */
+.suggest2
+{
+    font-family: Arial, sans-serif;
+
+    border-width: 1px;
+    border-style: solid;
+    border-color: #e5e5e5 #d1d1d1 #c3c3c3;
+    background-color: #fff;
+}
+
+.suggest2,
+.suggest2 .popup__content
+{
+    padding: 0;
+}
+
+.suggest2__content
+{
+    margin: 0;
+    padding: 0;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2/suggest2.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2/suggest2.css begin */
+.suggest2__items
+{
+    margin: 0;
+    padding: 0;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2/suggest2.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2/suggest2.css begin */
+.suggest2
+{
+    background-color: transparent;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2/suggest2.css end */
+/* ../../blocks-deskpad/suggest2/suggest2.styl begin */
+.suggest2_search_yes .suggest2__content:before {
+  position: absolute;
+  content: '';
+  background-color: #fff;
+}
+
+/* ../../blocks-deskpad/suggest2/suggest2.styl end */
+/* ../../blocks-desktop/suggest2/suggest2.styl begin */
+.suggest2_search_yes .suggest2__content:before {
+  top: -7px;
+  left: -13px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: calc(100vw - 130px);
+  height: 17px;
+  border-bottom: 15px solid #fff;
+  background: transparent;
+}
+/* @TODO выпилить SERP-70217 */
+.suggest2 {
+  background-color: transparent;
+}
+/* костыль из-за кастомного цвета ссылок на web4 */
+.suggest2-item_interact_link:not(.suggest2-item_monochrome).suggest2-item_type_rich .suggest2-item__text_type_title[class] {
+  color: #1a0dab;
+}
+
+/* ../../blocks-desktop/suggest2/suggest2.styl end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/suggest2-item.css begin */
+.suggest2-item
+{
+    overflow: hidden;
+
+    list-style-type: none;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.suggest2-item_selected_yes
+{
+    background: #ffeba0;
+}
+
+.suggest2-item__text
+{
+    white-space: nowrap;
+
+    color: #000;
+}
+
+.suggest2-item__text_type_url
+{
+    text-decoration: underline;
+
+    color: #22c;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/suggest2-item.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/suggest2-item.css begin */
+.suggest2-item_type_weather .suggest2-item__fact,
+.suggest2-item_type_traffic .suggest2-item__fact
+{
+    margin-left: 5px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/suggest2-item.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/suggest2-item.css begin */
+.suggest2-item
+{
+    cursor: pointer;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/suggest2-item.css end */
+/* ../../node_modules/islands/common.blocks/popup2/popup2.css begin */
+/**
+ * Без important стили класса перебиваются inline-стилями
+ */
+.popup2 {
+    position: absolute;
+}
+
+.popup2_outside_yes {
+    top: -10000px !important;
+    left: -10000px !important;
+
+    display: block !important;
+}
+
+/* ../../node_modules/islands/common.blocks/popup2/popup2.css end */
+/* ../../node_modules/islands/common.blocks/popup2/_theme/popup2_theme_clear.css begin */
+.popup2_theme_clear {
+    display: none;
+}
+
+.popup2_theme_clear.popup2_visible_yes {
+    display: block;
+}
+
+/* ../../node_modules/islands/common.blocks/popup2/_theme/popup2_theme_clear.css end */
+/* ../../blocks-desktop/popup2/_fixed/popup2_fixed_yes.styl begin */
+.popup2_fixed_yes {
+  position: fixed;
+}
+
+/* ../../blocks-desktop/popup2/_fixed/popup2_fixed_yes.styl end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__fact/suggest2-item__fact.css begin */
+.suggest2-item__fact
+{
+    color: #999;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__fact/suggest2-item__fact.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2/__a11y/suggest2__a11y.css begin */
+.suggest2__a11y
+{
+    position: absolute;
+    left: -32767px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2/__a11y/suggest2__a11y.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__bullet/suggest2-item__bullet.css begin */
+.suggest2-item__bullet
+{
+    margin: 0 7px;
+
+    color: #999;
+}
+
+.suggest2-item__bullet:before
+{
+    content: '→';
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__bullet/suggest2-item__bullet.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__link/suggest2-item__link.css begin */
+.suggest2-item__link
+{
+    display: block;
+    overflow: hidden;
+
+    text-decoration: none;
+    text-overflow: ellipsis;
+
+    color: #999; /* У длинной подсказки многоточие должно совпадать с цветом факта. */
+    outline: none;
+}
+
+.suggest2-item__link:hover .suggest2-item__fact
+{
+    color: #999;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__link/suggest2-item__link.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__link/suggest2-item__link.css begin */
+.suggest2-item__link:hover .suggest2-item__text_type_url
+{
+    color: #f00;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__link/suggest2-item__link.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__icon/suggest2-item__icon.css begin */
+.suggest2-item__icon
+{
+    display: inline-block;
+
+    vertical-align: middle;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__icon/suggest2-item__icon.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/__icon/suggest2-item__icon.css begin */
+.suggest2-item__icon
+{
+    width: 32px;
+    height: 32px;
+    margin: 0 0 0 5px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/__icon/suggest2-item__icon.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__icon/suggest2-item__icon.css begin */
+.suggest2-item__icon
+{
+    background-size: contain;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__icon/suggest2-item__icon.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__icon/_size/suggest2-item__icon_size_s.css begin */
+.suggest2-item__icon_size_s
+{
+    width: 16px;
+    height: 16px;
+    margin: 0 9px 2px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__icon/_size/suggest2-item__icon_size_s.css end */
+/* ../../blocks-desktop/suggest2-item/__icon/_size/suggest2-item__icon_size_s.styl begin */
+.suggest2-item__icon_size_s {
+  margin-bottom: 0;
+}
+
+/* ../../blocks-desktop/suggest2-item/__icon/_size/suggest2-item__icon_size_s.styl end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/__info/suggest2-item__info.css begin */
+.suggest2-item__info
+{
+    overflow: hidden;
+
+    margin-top: 5px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/__info/suggest2-item__info.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__thumb/suggest2-item__thumb.css begin */
+.suggest2-item__thumb {
+    position: relative;
+    z-index: 1;
+
+    overflow: hidden;
+
+    margin: 0 12px 0 0;
+
+    border-radius: 4px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto;
+
+    -webkit-flex-shrink: 0;
+
+    -ms-flex-negative: 0;
+
+    flex-shrink: 0;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.suggest2-item__thumb_badge .suggest2-item__thumb-badge {
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+
+    overflow: hidden;
+
+    width: 26px;
+    height: 20px;
+
+    text-align: center;
+    text-overflow: ellipsis;
+
+    font-size: 13px;
+    line-height: 20px;
+
+    color: #333;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.suggest2-item__thumb_shade::after {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    content: '';
+    opacity: 0.05;
+    border-radius: 4px;
+    background-color: #000;
+
+}
+
+.suggest2-item__thumb_border {
+    border: 1px solid rgba(0, 0, 0, .2);
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__thumb/suggest2-item__thumb.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/__img/suggest2-item__img.css begin */
+.suggest2-item__img
+{
+    float: left;
+
+    margin: 0 10px 7px 0;
+
+    background: no-repeat center center;
+    background-size: cover;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/__img/suggest2-item__img.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/__img/_size/suggest2-item__img_size_m.css begin */
+.suggest2-item__img_size_m
+{
+    width: 60px;
+    height: 60px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/__img/_size/suggest2-item__img_size_m.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__text/_type/suggest2-item__text_type_title-url.css begin */
+.suggest2-item__text_type_title-url
+{
+    overflow: hidden;
+
+    margin-top: 5px;
+
+    text-decoration: none;
+    text-overflow: ellipsis;
+
+    font-size: 16px;
+    line-height: 18px;
+
+    color: #00c;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__text/_type/suggest2-item__text_type_title-url.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__text/_type/suggest2-item__text_type_green-url.css begin */
+.suggest2-item__text_type_green-url
+{
+    margin-top: 2px;
+
+    font-size: 13px;
+    line-height: 1em;
+
+    color: #070;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__text/_type/suggest2-item__text_type_green-url.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__icon/_size/suggest2-item__icon_size_m.css begin */
+.suggest2-item__icon_size_m
+{
+    width: 22px;
+    height: 22px;
+    margin: 0 9px 2px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__icon/_size/suggest2-item__icon_size_m.css end */
+/* ../../blocks-desktop/suggest2-item/__icon/_size/suggest2-item__icon_size_m.styl begin */
+.suggest2-item__icon_size_m {
+  margin-bottom: 0;
+}
+
+/* ../../blocks-desktop/suggest2-item/__icon/_size/suggest2-item__icon_size_m.styl end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__icon/_size/suggest2-item__icon_size_l.css begin */
+.suggest2-item__icon_size_l
+{
+    width: 32px;
+    height: 32px;
+    margin: 0 5px;
+
+    vertical-align: top;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__icon/_size/suggest2-item__icon_size_l.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__icon/_size/suggest2-item__icon_size_l.css begin */
+.suggest2-item__icon_size_l
+{
+    height: 28px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__icon/_size/suggest2-item__icon_size_l.css end */
+/* ../../blocks-desktop/suggest2-item/__icon/_size/suggest2-item__icon_size_l.styl begin */
+.suggest2-item__icon_size_l {
+  vertical-align: middle;
+}
+
+/* ../../blocks-desktop/suggest2-item/__icon/_size/suggest2-item__icon_size_l.styl end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2/_theme/suggest2_theme_large.css begin */
+.suggest2_theme_large
+{
+    right: 0;
+    /* перекрываем inline left от popup offset*/
+    left: 0 !important;
+
+    padding: 0;
+
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    background: #fff;
+}
+
+/* Тень должна быть только снизу. */
+.suggest2_theme_large:before
+{
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+
+    display: block;
+
+    width: 100%;
+    height: 50%;
+
+    content: '';
+    box-shadow: 0 8px 25px -5px rgba(0,0,0,.25);
+}
+
+.suggest2_theme_large:after
+{
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    content: '';
+
+    background: #fff;
+}
+
+.suggest2_theme_large .suggest2__group
+{
+    position: relative;
+}
+
+.suggest2__content_theme_large
+{
+    position: relative;
+    z-index: 10;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2/_theme/suggest2_theme_large.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2/_theme/suggest2_theme_large.css begin */
+.suggest2_theme_large
+{
+    padding-bottom: 7px;
+}
+
+.suggest2_theme_large .suggest2__group + .suggest2__group
+{
+    position: relative;
+}
+
+.suggest2__content_theme_large
+{
+    display: inline-block;
+
+    max-width: 100%;
+    margin-left: 130px;
+
+    vertical-align: top;
+}
+
+.suggest2_theme_large .suggest2-item
+{
+    margin-right: 13px;
+    margin-left: -13px;
+
+    border-radius: 3px;
+}
+
+.suggest2_theme_large .suggest2__title
+{
+    display: none; /* https://st.yandex-team.ru/ISLSUGGEST-92 */
+}
+
+.suggest2_theme_large.suggest2_group_label .suggest2__title
+{
+    display: block;
+
+    margin-left: -13px;
+    padding-left: 0;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2/_theme/suggest2_theme_large.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2/_theme/suggest2_theme_large.css begin */
+.suggest2_theme_large
+{
+    padding-top: 7px;
+
+    font-size: 16px;
+    line-height: 32px;
+
+    background-color: transparent;
+}
+
+.suggest2_theme_large .suggest2-item
+{
+    padding: 0 5px 0 13px;
+}
+
+.suggest2_theme_large:after
+{
+    top: 10px; /* Чтобы не перекрывал лого */
+    background-color: #fff;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2/_theme/suggest2_theme_large.css end */
+/* ../../blocks-deskpad/suggest2/_theme/suggest2_theme_large.styl begin */
+.suggest2_theme_large .suggest2-item {
+  padding-right: 13px;
+}
+
+/* ../../blocks-deskpad/suggest2/_theme/suggest2_theme_large.styl end */
+/* ../../blocks-desktop/suggest2/_theme/suggest2_theme_large.styl begin */
+.suggest2_theme_large {
+  margin-top: 7px;
+  padding-top: 0;
+}
+.suggest2_theme_large .suggest2-item {
+  padding: 0 13px;
+  margin-right: 16px;
+}
+.suggest2_theme_large .suggest2__items {
+  font-size: 18px;
+  line-height: 32px;
+}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .suggest2_theme_large .suggest2__content {
+    padding-left: 2px;
+  }
+  .suggest2_theme_large .suggest2-item {
+    padding-left: 12px;
+  }
+}
+/* @TODO выпилить SERP-70217 */
+.suggest2_theme_large {
+  background-color: transparent;
+}
+/* @TODO выпилить SERP-70217 */
+.suggest2_theme_large:after {
+  top: 10px;
+  background-color: #fff;
+}
+
+/* ../../blocks-desktop/suggest2/_theme/suggest2_theme_large.styl end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/_personal/suggest2-item_personal_yes.css begin */
+.suggest2-item_personal_yes
+{
+    /* downgrade for UC Browser */
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+
+    max-width: none;
+
+    -webkit-justify-content: space-between;
+
+    -ms-flex-pack: justify;
+
+    justify-content: space-between;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.suggest2-item.suggest2-item_personal_yes .suggest2-item__text
+{
+    display: block;
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    color: #551a8b;
+
+    -webkit-box-flex: 0;
+    -webkit-flex-shrink: 1;
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/_personal/suggest2-item_personal_yes.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/_personal/suggest2-item_personal_yes.css begin */
+.suggest2-item_personal_yes
+{
+    height: 32px;
+
+    transition: height .3s linear;
+}
+
+.suggest2-item.suggest2-item_personal_yes
+{
+    padding-right: 0;
+}
+
+.suggest2-item_personal_yes .suggest2-item__text
+{
+    padding: 0;
+}
+
+.suggest2-item_personal_yes .suggest2-item__cross
+{
+    visibility: hidden;
+
+    -webkit-flex: 0 0 32px;
+
+    -ms-flex: 0 0 32px;
+
+    flex: 0 0 32px;
+}
+
+.suggest2-item_personal_yes.suggest2-item_selected_yes .suggest2-item__cross
+{
+    visibility: visible;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/_personal/suggest2-item_personal_yes.css end */
+/* ../../blocks-desktop/suggest2-item/_personal/suggest2-item_personal_yes.styl begin */
+.suggest2-item_personal_yes .suggest2-item__icon {
+  margin-top: 2px;
+  margin-bottom: 0;
+}
+
+/* ../../blocks-desktop/suggest2-item/_personal/suggest2-item_personal_yes.styl end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__cross/suggest2-item__cross.css begin */
+.suggest2-item__cross
+{
+    width: 32px;
+    height: 32px;
+
+    background-image: url("//yastatic.net/islands/_/DNNWcBEi-Mt-CN07VURlZ_knmsI.svg");
+    background-position: 50% 50%;
+
+    -webkit-flex-shrink: 0;
+
+    -ms-flex-negative: 0;
+
+    flex-shrink: 0;
+}
+
+.i-ua_svg_no .suggest2-item__cross
+{
+    background: no-repeat url("//yastatic.net/islands/_/QBsrSjpKllyvajVHt85LFJ78REU.png");
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__cross/suggest2-item__cross.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__spacer/suggest2-item__spacer.css begin */
+.suggest2-item__spacer
+{
+    /* downgrade for UC Browser */
+    -webkit-flex: 1 1 0px;
+    -ms-flex: 1 1 0px;
+    flex: 1 1 0px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__spacer/suggest2-item__spacer.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2/_group/suggest2_group_label.css begin */
+.suggest2_group_label .suggest2__title
+{
+    position: relative;
+
+    display: block;
+
+    padding-left: 4px;
+
+    text-align: left;
+
+    color: #999;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2/_group/suggest2_group_label.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2/_group/suggest2_group_label.css begin */
+.suggest2_group_label .suggest2__title
+{
+    font-size: 13px;
+    line-height: 24px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2/_group/suggest2_group_label.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/_type/suggest2-item_type_rich.css begin */
+.suggest2-item.suggest2-item_type_rich:not(.suggest2-item_interact_link),
+.suggest2-item_type_rich.suggest2-item_interact_link .suggest2-item__link {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.suggest2-item_type_rich:not(.suggest2-item_interact_link) .suggest2-item__link {
+    padding: 0;
+}
+
+.suggest2-item_type_rich,
+.suggest2-item_type_rich .suggest2-item__link {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+
+    -webkit-align-items: center;
+
+    -ms-flex-align: center;
+
+    align-items: center;
+}
+
+.suggest2_old-flex .suggest2-item_type_rich,
+.suggest2_old-flex .suggest2-item_type_rich .suggest2-item__link {
+    display: -webkit-box;
+
+    -webkit-box-align: center;
+}
+
+.suggest2-item_type_rich .suggest2-item__link {
+    width: 100%;
+}
+
+.suggest2-item_type_rich .suggest2-item__text,
+.suggest2-item_type_rich .suggest2-item__desc {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.suggest2-item_type_rich .suggest2-item__text {
+    display: block;
+}
+
+.suggest2-item_type_rich .suggest2-item__text_type_title {
+    font-weight: 700;
+
+    color: #000;
+}
+
+.suggest2-item_type_rich .suggest2-item__text_type_subtitle {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+
+    color: #999;
+
+    -webkit-align-items: center;
+
+    -ms-flex-align: center;
+
+    align-items: center;
+}
+
+.suggest2-item_type_rich .suggest2-item__text_type_subtitle :first-child {
+    overflow: hidden;
+
+    max-width: 100%;
+
+    text-overflow: ellipsis;
+
+    -webkit-flex-shrink: 0;
+
+    -ms-flex-negative: 0;
+
+    flex-shrink: 0;
+}
+
+.suggest2_old-flex .suggest2-item_type_rich .suggest2-item__text_type_subtitle {
+    display: -webkit-box;
+
+    -webkit-box-align: center;
+}
+
+.suggest2-item_interact_link:not(.suggest2-item_monochrome).suggest2-item_type_rich .suggest2-item__text_type_title {
+    color: #00c;
+}
+
+.suggest2-item_interact_link:not(.suggest2-item_monochrome).suggest2-item_type_rich .suggest2-item__text_type_subtitle {
+    color: #070;
+}
+
+.suggest2-item_type_rich .suggest2-item__desc {
+    color: #999;
+}
+
+.suggest2-item_type_rich .suggest2-item__desc:not(:first-child) {
+    margin-left: 5px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/_type/suggest2-item_type_rich.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/_reverse/suggest2-item_reverse.css begin */
+.suggest2-item_reverse.suggest2-item_type_rich,
+.suggest2-item_reverse.suggest2-item_type_rich .suggest2-item__link {
+    -webkit-flex-direction: row-reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+
+.suggest2_old-flex .suggest2-item_reverse.suggest2-item_type_rich,
+.suggest2_old-flex .suggest2-item_reverse.suggest2-item_type_rich .suggest2-item__link {
+    -webkit-box-direction: reverse;
+    -webkit-box-pack: justify;
+}
+
+.suggest2-item_reverse .suggest2-item__thumb {
+    margin: 0;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/_reverse/suggest2-item_reverse.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/_icon/suggest2-item_icon.css begin */
+.suggest2-item_icon .suggest2-item__thumb {
+    background-size: auto;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/_icon/suggest2-item_icon.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__thumb/_size/suggest2-item__thumb_size_s.css begin */
+.suggest2-item__thumb_size_s {
+    width: 35px;
+    min-width: 35px;
+    height: 35px;
+}
+
+.suggest2-item__thumb_size_s.suggest2-item__thumb_aspect_portrait {
+    width: 23px;
+    min-width: 23px;
+}
+
+.suggest2-item__thumb_size_s.suggest2-item__thumb_aspect_landscape {
+    width: 64px;
+    min-width: 64px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__thumb/_size/suggest2-item__thumb_size_s.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__thumb/_size/suggest2-item__thumb_size_m.css begin */
+.suggest2-item__thumb_size_m {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+}
+
+.suggest2-item__thumb_size_m.suggest2-item__thumb_aspect_portrait {
+    width: 32px;
+    min-width: 32px;
+}
+
+.suggest2-item__thumb_size_m.suggest2-item__thumb_aspect_landscape {
+    width: 72px;
+    min-width: 72px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__thumb/_size/suggest2-item__thumb_size_m.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__thumb/_size/suggest2-item__thumb_size_l.css begin */
+.suggest2-item__thumb_size_l {
+    width: 68px;
+    min-width: 68px;
+    height: 68px;
+}
+
+.suggest2-item__thumb_size_l.suggest2-item__thumb_aspect_portrait {
+    width: 48px;
+    min-width: 48px;
+}
+
+.suggest2-item__thumb_size_l.suggest2-item__thumb_aspect_landscape {
+    width: 100px;
+    min-width: 100px;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/desktop.blocks/suggest2-item/__thumb/_size/suggest2-item__thumb_size_l.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__thumb/_circle/suggest2-item__thumb_circle.css begin */
+.suggest2-item__thumb_circle,
+.suggest2-item__thumb_circle.suggest2-item__thumb_shade::after {
+    border-radius: 50%;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__thumb/_circle/suggest2-item__thumb_circle.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__thumb/_contain/suggest2-item__thumb_contain.css begin */
+.suggest2-item__thumb_contain {
+    background-size: contain;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__thumb/_contain/suggest2-item__thumb_contain.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__mark/suggest2-item__mark.css begin */
+.suggest2-item__mark {
+    overflow: hidden;
+
+    width: 18px;
+    height: 20px;
+    margin-left: 4px;
+
+    vertical-align: middle;
+
+    background-repeat: no-repeat;
+    background-position: center;
+
+    -webkit-flex-shrink: 0;
+
+    -ms-flex-negative: 0;
+
+    flex-shrink: 0;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__mark/suggest2-item__mark.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__mark/_verified/suggest2-item__mark_verified.css begin */
+.suggest2-item__mark_verified {
+    /* TODO: заменить на ссылку из suggest-flags-icons */
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNNS44MTEgMTQuNjlsLTEuMDUuMTM4YTEgMSAwIDAgMS0xLjA1NS0uNjFsLS40MDUtLjk3OGExIDEgMCAwIDAtLjU0MS0uNTQxbC0uOTc5LS40MDVhMSAxIDAgMCAxLS42MDktMS4wNTVsLjEzOS0xLjA1YTEgMSAwIDAgMC0uMTk4LS43NGwtLjY0NS0uODRhMSAxIDAgMCAxIDAtMS4yMThsLjY0NS0uODRhMSAxIDAgMCAwIC4xOTgtLjc0bC0uMTM5LTEuMDVhMSAxIDAgMCAxIC42MS0xLjA1NWwuOTc4LS40MDVBMSAxIDAgMCAwIDMuMyAyLjc2bC40MDUtLjk3OWExIDEgMCAwIDEgMS4wNTUtLjYwOWwxLjA1LjEzOWExIDEgMCAwIDAgLjc0LS4xOThsLjg0LS42NDVhMSAxIDAgMCAxIDEuMjE4IDBsLjg0LjY0NWExIDEgMCAwIDAgLjc0LjE5OGwxLjA1LS4xMzlhMSAxIDAgMCAxIDEuMDU1LjYxbC40MDUuOTc4YTEgMSAwIDAgMCAuNTQxLjU0MWwuOTc5LjQwNWExIDEgMCAwIDEgLjYwOSAxLjA1NWwtLjEzOSAxLjA1YTEgMSAwIDAgMCAuMTk4Ljc0bC42NDUuODRhMSAxIDAgMCAxIDAgMS4yMThsLS42NDUuODRhMSAxIDAgMCAwLS4xOTguNzRsLjEzOSAxLjA1YTEgMSAwIDAgMS0uNjEgMS4wNTVsLS45NzguNDA1YTEgMSAwIDAgMC0uNTQxLjU0MWwtLjQwNS45NzlhMSAxIDAgMCAxLTEuMDU1LjYwOWwtMS4wNS0uMTM5YTEgMSAwIDAgMC0uNzQuMTk4bC0uODQuNjQ1YTEgMSAwIDAgMS0xLjIxOCAwbC0uODQtLjY0NWExIDEgMCAwIDAtLjc0LS4xOTh6IiBmaWxsPSIjMUY2QUVEIi8+PHBhdGggc3Ryb2tlPSIjRkZGIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTTQuMzY0IDhsMi43ODIgMi45MSA0LjQ5LTUuNDU1Ii8+PC9nPjwvc3ZnPg==');
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__mark/_verified/suggest2-item__mark_verified.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__mark/_shield/suggest2-item__mark_shield.css begin */
+.suggest2-item__mark_shield {
+    /* TODO: заменить на ссылку из suggest-flags-icons */
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMi41NDVMNS44MzMgMGw1LjgzNCAyLjU0NXYuNjM3QzExLjY2NyAxMC43NTcgNS44MzMgMTQgNS44MzMgMTRTMCAxMC43NTcgMCAzLjE4MnYtLjYzN3ptNC44MzMgMi4wMjNsLTEuMzMtMS45NDNjLTEuNDc1LjM1Ni0xLjQ2IDEuNjE3LTEuNDYgMS42MTdzLS4wNTUuOTguNDY4IDEuNzY1Yy41MjMuNzg1Ljc0NSAxLjEyOSAxLjM4OCAxLjc3Mi42NDMuNjQyLjk4Ljg1NyAxLjc2NiAxLjM4Ljc4NS41MjMgMS43NjMuNDY1IDEuNzYzLjQ2NXMxLjIxNC4wMDEgMS42MTMtMS40NjRMNy4xMjUgNi44NDRzLS40NjkuNjUzLS41NDYuNzc4Yy0uMDg3LjE0MS0uMy4yOTUtLjUzLjE1NC0uMjMxLS4xNDEtLjY3NS0uNDA4LTEuMjA2LS45NC0uNTMtLjUzMi0uODA2LS45ODItLjk0OC0xLjIxMi0uMTQtLjIzMS4wMy0uNDU0LjE0Ny0uNTM4LjExOC0uMDgzLjc5LS41MTguNzktLjUxOHoiIGZpbGw9IiM5OTkiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvc3ZnPg==');
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/common.blocks/suggest2-item/__mark/_shield/suggest2-item__mark_shield.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/_insert-arrow/suggest2-item_insert-arrow_yes.css begin */
+.suggest2-item.suggest2-item_insert-arrow_yes {
+    /* downgrade for UC Browser */
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+
+    max-width: none;
+    padding-right: 0;
+}
+
+.suggest2-item_insert-arrow_yes .suggest2-item__icon {
+    margin-top: 2px;
+    margin-bottom: 0;
+}
+
+.suggest2-item.suggest2-item_insert-arrow_yes .suggest2-item__text {
+    display: block;
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    -webkit-box-flex: 0;
+    -webkit-flex-shrink: 1;
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/_insert-arrow/suggest2-item_insert-arrow_yes.css end */
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/__arrow/suggest2-item__arrow.css begin */
+.suggest2-item__arrow {
+    width: 32px;
+    height: 32px;
+
+    opacity: .2;
+
+    -webkit-flex-shrink: 0;
+
+    -ms-flex-negative: 0;
+
+    flex-shrink: 0;
+}
+
+.suggest2-item__arrow:hover {
+    opacity: 1;
+}
+
+/* ../../node_modules/@yandex-lego/ui.suggest2/deskpad.blocks/suggest2-item/__arrow/suggest2-item__arrow.css end */
+/* ../../blocks-desktop/suggest2-item/__arrow/suggest2-item__arrow.styl begin */
+.suggest2-item__arrow {
+  background: no-repeat url("/static/web4/freeze/1VPXEK1EuSvY_re_6QZM_DGwaNo.svg") center;
+}
+
+/* ../../blocks-desktop/suggest2-item/__arrow/suggest2-item__arrow.styl end */
+/* ../../blocks-common/main/main.styl begin */
+.main {
+  position: relative;
+}
+
+/* ../../blocks-common/main/main.styl end */
+/* ../../blocks-deskpad/main/main.styl begin */
+.main {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  min-height: 100%;
+  margin-top: -411px;
+  padding-top: 411px;
+  padding-bottom: 6px;
+  min-width: 600px;
+}
+/* Стили необходимы для скрывания контента страницы при потерянном соединении с интернетом */
+.main_hidden-content_yes {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+.main_hidden-content_yes .main__top,
+.main_hidden-content_yes .main__center {
+  display: none;
+}
+.main_super-position_yes {
+  z-index: 2147483647;
+}
+
+/* ../../blocks-deskpad/main/main.styl end */
+/* ../../blocks-desktop/main/__result/main__result.styl begin */
+.main__result-wrapper {
+  display: inline-block;
+  white-space: normal;
+  padding: 20px 16px 20px 36px;
+  margin: 0 0 20px -36px;
+  border-radius: 8px;
+  box-shadow: 0 0 6px 0 rgba(0,0,0,0.04), 0 4px 10px 0 rgba(13,35,67,0.25);
+}
+.main__result-wrapper:empty {
+  display: none;
+}
+.main__result-wrapper .favicon__icon {
+  position: relative;
+  top: 4px;
+}
+.main__result-wrapper .serp-item {
+  margin: 0;
+}
+
+/* ../../blocks-desktop/main/__result/main__result.styl end */
+/* ../../blocks-common/rub/rub.styl begin */
+@font-face {
+  font-family: ArialRub;
+  src: url("/static/web4/freeze/sIJpt2WHDXpNt0Pyuj-a0ZnY-h8.woff") format('woff'), url("/static/web4/freeze/iOX23Z1CHz6YYv5o-NPNJCMNEco.ttf") format('truetype');
+}
+.rub {
+  font-family: ArialRub, Arial, Helvetica, sans-serif;
+}
+
+/* ../../blocks-common/rub/rub.styl end */
+/* ../../node_modules/islands/common.blocks/spin2/spin2.css begin */
+.spin2 {
+    display: none;
+
+    -moz-box-sizing: border-box;
+
+    box-sizing: border-box;
+
+    border: 2px solid transparent;
+    border-radius: 100px; /* На android 2.3 border-radius в % не поддерживается */
+    /*
+     * Поддержка CSS анимаций и CSS градиентов у основных браузеров совпадает
+     * Если браузер не поддерживает градиенты, будет показана gif-анимация
+     */
+    background-image: url("/static/web4/freeze/lMheXM1Y3XcixfNpGnrupH6cjfc.gif");
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+}
+
+/* Для правильного позиционирования блока относительно baseline */
+.spin2:after {
+    visibility: hidden;
+
+    content: '\00A0'; /* &nbsp; */
+}
+
+/* ../../node_modules/islands/common.blocks/spin2/spin2.css end */
+/* ../../blocks-common/spin2/spin2.styl begin */
+/**
+ * Костыль для CSSO, см. ISLCOMPONENTS-1634
+ * TODO: удалить после перехода с CSSO на другой инструмент
+ */
+.spin2 {
+  border-top-color: #fc0;
+  border-left-color: #fc0;
+}
+
+/* ../../blocks-common/spin2/spin2.styl end */
+/* ../../node_modules/islands/common.blocks/spin2/_progress/spin2_progress_yes.css begin */
+/*
+  (1) https://st.yandex-team.ru/ISL-6342
+      Добавлена задержка начала анимации, что заставляет её нормально работать в iOS 12-
+
+      Решение взято отсюда:
+      https://stackoverflow.com/questions/29219534/css-animation-not-always-starting-in-ios-8-safari
+*/
+
+.spin2_progress_yes {
+    display: inline-block;
+
+    -webkit-animation: islands-spin2 1s 0.21s infinite linear;
+
+    animation: islands-spin2 1s 0.21s infinite linear; /* (1) */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;  /* Для ускорения анимации */
+}
+
+@-webkit-keyframes islands-spin2 {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes islands-spin2 {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+/* ../../node_modules/islands/common.blocks/spin2/_progress/spin2_progress_yes.css end */
+/* ../../blocks-common/spin2/_progress/spin2_progress_yes.styl begin */
+/**
+ * 1, 2: Костыли для CSSO, см. ISLCOMPONENTS-1634
+ * TODO: удалить 1 и 2 после перехода с CSSO на другой инструмент
+ */
+.spin2_progress_yes {
+  position: relative;
+}
+.spin2_position_center {
+  position: absolute;
+}
+@-webkit-keyframes islands-spin_ {
+  from {
+    -webkit-transform: rotate(1deg);
+    transform: rotate(1deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes islands-spin_ {
+  from {
+    -webkit-transform: rotate(1deg);
+    transform: rotate(1deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+/* ../../blocks-common/spin2/_progress/spin2_progress_yes.styl end */
+/* ../../node_modules/islands/common.blocks/spin2/_view/spin2_view_default.css begin */
+/*.spin2_view_default.spin2_progress_yes {
+    border-top-color: var(--color-bg-action);
+    border-left-color: var(--color-bg-action);
+}*/
+
+/* ../../node_modules/islands/common.blocks/spin2/_view/spin2_view_default.css end */
+/* ../../node_modules/islands/common.blocks/spin2/_tone/spin2_tone.css begin */
+/*.spin2_tone_default {
+    --color-bg-action: #fc0;
+}*/
+/*.spin2_tone_red {
+    --color-bg-action: #fff;
+}*/
+/*.spin2_tone_grey {
+    --color-bg-action: #2196f3;
+}*/
+/*.spin2_tone_dark {
+    --color-bg-action: #eceff1;
+}*/
+/*.spin2_tone_market {
+    --color-bg-action: #fc0;
+}*/
+/*.spin2_tone_blue {
+    --color-bg-action: #4e66ff;
+}*/
+
+/* ../../node_modules/islands/common.blocks/spin2/_tone/spin2_tone.css end */
+/* ../../node_modules/islands/common.blocks/spin2/_tone/spin2_tone_default.css begin */
+.spin2_view_default.spin2_tone_default.spin2_progress_yes {
+    border-top-color: #fc0;
+    border-left-color: #fc0;
+}
+
+/* ../../node_modules/islands/common.blocks/spin2/_tone/spin2_tone_default.css end */
+/* ../../node_modules/islands/common.blocks/spin2/_size/spin2_size_xxs.css begin */
+.spin2_size_xxs {
+    width: 16px;
+    height: 16px;
+
+    font-size: 13px;
+    line-height: 12px;
+
+    background-position: -2px -2px;
+}
+
+.spin2_size_xxs.spin2_position_center {
+    /* Отступ равен половине ширины */
+    margin-top: -8px;
+    margin-left: -8px;
+}
+
+/* ../../node_modules/islands/common.blocks/spin2/_size/spin2_size_xxs.css end */
+/* ../../node_modules/islands/common.blocks/spin2/_size/spin2_size_xs.css begin */
+.spin2_size_xs {
+    width: 24px;
+    height: 24px;
+
+    font-size: 13px;
+    line-height: 20px;
+
+    background-position: -2px -19px;
+}
+
+.spin2_size_xs.spin2_position_center {
+    /* Отступ равен половине ширины */
+    margin-top: -12px;
+    margin-left: -12px;
+}
+
+/* ../../node_modules/islands/common.blocks/spin2/_size/spin2_size_xs.css end */
+/* ../../node_modules/islands/common.blocks/spin2/_size/spin2_size_s.css begin */
+.spin2_size_s {
+    width: 28px;
+    height: 28px;
+
+    font-size: 13px;
+    line-height: 24px;
+
+    background-position: -2px -44px;
+}
+
+.spin2_size_s.spin2_position_center {
+    /* Отступ равен половине ширины */
+    margin-top: -14px;
+    margin-left: -14px;
+}
+
+/* ../../node_modules/islands/common.blocks/spin2/_size/spin2_size_s.css end */
+/* ../../node_modules/islands/common.blocks/spin2/_size/spin2_size_m.css begin */
+.spin2_size_m {
+    width: 32px;
+    height: 32px;
+
+    font-size: 15px;
+    line-height: 28px;
+
+    background-position: -2px -73px;
+}
+
+.spin2_size_m.spin2_position_center {
+    /* Отступ равен половине ширины */
+    margin-top: -16px;
+    margin-left: -16px;
+}
+
+/* ../../node_modules/islands/common.blocks/spin2/_size/spin2_size_m.css end */
+/* ../../node_modules/islands/common.blocks/spin2/_size/spin2_size_l.css begin */
+.spin2_size_l {
+    width: 38px;
+    height: 38px;
+
+    font-size: 18px;
+    line-height: 34px;
+
+    background-position: -2px -106px;
+}
+
+.spin2_size_l.spin2_position_center {
+    /* Отступ равен половине ширины */
+    margin-top: -19px;
+    margin-left: -19px;
+}
+
+/* ../../node_modules/islands/common.blocks/spin2/_size/spin2_size_l.css end */
+/* ../../node_modules/@yandex-lego/ui.islands-deprecated/common.blocks/paranja/paranja.css begin */
+.paranja {
+    position: fixed;
+    top: -100%; /*https://st.yandex-team.ru/ISLPAGE-453*/
+    right: -100%;
+    bottom: -100%;
+    left: -100%;
+}
+
+.paranja_state_close {
+    visibility: hidden;
+
+    opacity: 0;
+
+    transition: visibility 0s .3s, opacity .3s ease-out;
+}
+
+.paranja_state_open {
+    visibility: visible;
+
+    opacity: 1;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+    transition: opacity .3s ease-out;
+}
+
+/* ../../node_modules/@yandex-lego/ui.islands-deprecated/common.blocks/paranja/paranja.css end */
+/* ../../blocks-common/paranja/paranja.styl begin */
+.paranja_state_close {
+  transition: visibility 0s 0.15s, opacity 0.15s ease-out;
+}
+
+/* ../../blocks-common/paranja/paranja.styl end */
+/* ../../blocks-deskpad/paranja/paranja.styl begin */
+.paranja {
+/* паранджа должна перекрыть advanced-search (10) */
+  z-index: 10;
+}
+
+/* ../../blocks-deskpad/paranja/paranja.styl end */
+/* ../../node_modules/@yandex-lego/ui.islands-deprecated/common.blocks/paranja/_theme/paranja_theme_normal.css begin */
+.paranja_theme_normal {
+    background: rgba(0, 0, 0, .15);
+}
+
+/* ../../node_modules/@yandex-lego/ui.islands-deprecated/common.blocks/paranja/_theme/paranja_theme_normal.css end */
+/* ../../blocks-deskpad/main/__carousel/main__carousel.styl begin */
+.main__carousel {
+  position: relative;
+  z-index: 10;
+}
+
+/* ../../blocks-deskpad/main/__carousel/main__carousel.styl end */
+/* ../../blocks-desktop/main/__carousel/main__carousel.styl begin */
+.main__carousel {
+  min-width: 990px;
+  margin-left: -116px;
+}
+
+/* ../../blocks-desktop/main/__carousel/main__carousel.styl end */
+/* ../../blocks-deskpad/main/__center/main__center.styl begin */
+.main__center {
+  z-index: 0;
+  padding-left: 30px;
+}
+
+/* ../../blocks-deskpad/main/__center/main__center.styl end */
+/* ../../blocks-desktop/main/__center/main__center.styl begin */
+.main__center {
+  margin-left: 100px;
+  padding-top: 31px;
+  padding-left: 16px;
+}
+
+/* ../../blocks-desktop/main/__center/main__center.styl end */
+/* ../../blocks-deskpad/b-page/_hide-serp/b-page_hide-serp_yes.styl begin */
+.b-page_hide-serp_yes .carousel {
+  margin-bottom: 0;
+}
+.b-page_hide-serp_yes .main {
+  padding-bottom: 0;
+}
+.b-page_hide-serp_yes .main__content {
+  display: none;
+}
+.b-page_hide-serp_yes .serp-footer {
+  display: none;
+}
+
+/* ../../blocks-deskpad/b-page/_hide-serp/b-page_hide-serp_yes.styl end */
+/* ../../blocks-deskpad/content/content.styl begin */
+.content {
+  white-space: nowrap;
+}
+.content__left,
+.content__right {
+  display: inline-block;
+  vertical-align: top;
+  white-space: normal;
+}
+
+/* ../../blocks-deskpad/content/content.styl end */
+/* ../../blocks-desktop/content/__left/content__left.styl begin */
+.content__left {
+  width: 536px;
+}
+
+/* ../../blocks-desktop/content/__left/content__left.styl end */
+/* ../../blocks-desktop/content/__right/content__right.styl begin */
+.content__right {
+  margin-left: 50px;
+}
+.content__right_cols_6 {
+  width: 260px;
+}
+.content__right_cols_8 {
+  width: 352px;
+}
+.content__right_cols_10 {
+  width: 444px;
+}
+.content__right_cols_12 {
+  width: 536px;
+}
+.content__right_wide {
+  min-width: 260px;
+  max-width: 1280px;
+  width: calc(100% - 716px);
+}
+
+/* ../../blocks-desktop/content/__right/content__right.styl end */
+/* ../../blocks-common/button2/_theme/button2_theme_default.styl begin */
+.button2_theme_default {
+  color: #000;
+}
+.button2_theme_default:before {
+  background-color: #e6e6e6;
+}
+.button2_theme_default.button2_hovered_yes:before {
+  background-color: #dbdbdb;
+}
+.button2_theme_default.button2_checked_yes:before {
+  background-color: #515151;
+}
+.utilityfocus .button2_theme_default.button2_focused_yes:before {
+  border: 2px solid #a1a1a1;
+}
+.button2_theme_default.button2_pressed_yes:before {
+  background-color: #dbdbdb;
+}
+.button2_theme_default.button2_pressed_yes.button2_checked_yes:before {
+  background-color: #515151;
+}
+.button2_theme_default.button2_checked_yes {
+  color: #fff;
+}
+.button2_theme_default.button2_view_action.button2_hovered_yes:before {
+  background-color: #f2c200;
+}
+.button2_theme_default.button2_view_action.button2_checked_yes:before {
+  background-color: #594700;
+}
+.utilityfocus .button2_theme_default.button2_view_action.button2_focused_yes:before {
+  border: 2px solid #b38f00;
+}
+.button2_theme_default.button2_view_action.button2_pressed_yes:before {
+  background-color: #f2c200;
+}
+.button2_theme_default.button2_view_action.button2_pressed_yes.button2_checked_yes:before {
+  background-color: #594700;
+}
+.button2_theme_default.button2_view_action:before {
+  background-color: #fc0;
+}
+.button2_theme_default.button2_disabled_yes {
+  opacity: 0.4;
+}
+.button2_theme_default.button2_disabled_yes .icon {
+  opacity: 0.9;
+}
+
+/* ../../blocks-common/button2/_theme/button2_theme_default.styl end */
+/* ../../construct/blocks-common/favicon/favicon.styl begin */
+.favicon {
+  top: 3px;
+}
+.favicon__icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ../../construct/blocks-common/favicon/favicon.styl end */
+/* ../../construct/blocks-deskpad/favicon/favicon.styl begin */
+.favicon {
+  position: absolute;
+  left: -22px;
+}
+.favicon__icon {
+  display: block;
+}
+
+/* ../../construct/blocks-deskpad/favicon/favicon.styl end */
+/* ../../blocks-desktop/serp-adv/_type/serp-adv_type_right.styl begin */
+/* Стили для селектора .serp-adv-item в правой колонке
+ * Контент этого файла в случае маскировки рекламы будет изменен
+ * Селектор .serp-adv-item изменится на селектор вида .serp-item[data-abcd]
+ */
+.content__right .serp-adv-item {
+  width: 260px;
+}
+.content__right .serp-adv-item .organic__path {
+  margin-right: 14px;
+}
+
+/* ../../blocks-desktop/serp-adv/_type/serp-adv_type_right.styl end */
+/* ../../blocks-deskpad/serp-adv/__add/serp-adv__add.styl begin */
+.serp-adv__add {
+  display: inline-block;
+  margin: 5px 10px 0 0;
+}
+.serp-adv__add .link {
+  text-decoration: underline;
+}
+.serp-adv__add_hidden_yes {
+  display: none;
+}
+
+/* ../../blocks-deskpad/serp-adv/__add/serp-adv__add.styl end */
+/* ../../blocks-deskpad/serp-adv/__all/serp-adv__all.styl begin */
+.serp-adv__all {
+  display: inline-block;
+  margin-top: 5px;
+}
+.serp-adv__all .link {
+  text-decoration: underline;
+}
+
+/* ../../blocks-deskpad/serp-adv/__all/serp-adv__all.styl end */
+/* ../../blocks-deskpad/serp-adv/__found/serp-adv__found.styl begin */
+.serp-adv__found {
+  font-weight: bold;
+}
+
+/* ../../blocks-deskpad/serp-adv/__found/serp-adv__found.styl end */
+/* ../../blocks-deskpad/serp-adv/__head/serp-adv__head.styl begin */
+/* Стили в дескпад не применятся для замаскированных от адблок рекламных сниппетов,
+ * если пытаться мачиться на них через .serp-adv-item
+ * Чтобы они применились нужно писать их напрямую в desktop/serp-adv.css
+ */
+.serp-adv__head {
+  margin-bottom: 16px;
+}
+.serp-adv__head-link {
+  color: #666 !important;
+}
+.serp-adv__head-link.link_hovered_yes {
+  color: #d00 !important;
+}
+
+/* ../../blocks-deskpad/serp-adv/__head/serp-adv__head.styl end */
+/* ../../blocks-deskpad/serp-adv/__displayed/serp-adv__displayed.styl begin */
+.serp-adv__displayed {
+  margin-top: 5px;
+}
+
+/* ../../blocks-deskpad/serp-adv/__displayed/serp-adv__displayed.styl end */
+/* ../../blocks-deskpad/serp-adv/__banner/serp-adv__banner.styl begin */
+.serp-adv__banner {
+  overflow: hidden;
+  width: 200px;
+  height: 300px;
+  margin-bottom: 12px;
+  background: rgba(0,0,0,0.06);
+}
+
+/* ../../blocks-deskpad/serp-adv/__banner/serp-adv__banner.styl end */
+/* ../../blocks-desktop/serp-adv/__banner/serp-adv__banner.styl begin */
+.serp-adv__banner .serp-adv__image {
+  border: 0;
+}
+
+/* ../../blocks-desktop/serp-adv/__banner/serp-adv__banner.styl end */
+/* ../../blocks-common/serp-list/serp-list.styl begin */
+.serp-list__plain-visible {
+  display: none;
+}
+
+/* ../../blocks-common/serp-list/serp-list.styl end */
+/* ../../blocks-deskpad/serp-list/serp-list.styl begin */
+.serp-list_right_yes:not(:empty) {
+  margin-bottom: 26px;
+}
+/* Отступ карточки от к-ка сверху, только если к-к там есть.
+ * https://st.yandex-team.ru/SERP-36553 */
+.serp-list_right_yes:not(:first-of-type):not(:empty) {
+  margin-top: 20px;
+}
+
+/* ../../blocks-deskpad/serp-list/serp-list.styl end */
+/* ../../blocks-common/serp-item/serp-item.styl begin */
+.serp-item {
+  position: relative;
+}
+
+/* ../../blocks-common/serp-item/serp-item.styl end */
+/* ../../blocks-deskpad/serp-item/serp-item.styl begin */
+.serp-item {
+  color: #333;
+}
+
+/* ../../blocks-deskpad/serp-item/serp-item.styl end */
+/* ../../blocks-desktop/serp-item/serp-item.styl begin */
+.serp-item {
+  margin-bottom: 26px;
+}
+.serp-item_feedback::after {
+  position: absolute;
+  top: -11px;
+  right: -18px;
+  bottom: -11px;
+  left: -28px;
+  content: '';
+  outline: 2px solid #ca362c;
+}
+
+/* ../../blocks-desktop/serp-item/serp-item.styl end */
+/* ../../node_modules/islands/common.blocks/a11y-hidden/a11y-hidden.css begin */
+.a11y-hidden {
+    position: absolute;
+    left: -32767px;
+
+    -webkit-user-select: none;
+
+    -moz-user-select: none;
+
+    -ms-user-select: none;
+
+    user-select: none;
+}
+
+/* ../../node_modules/islands/common.blocks/a11y-hidden/a11y-hidden.css end */
+/* ../../blocks-desktop/uni-answer/uni-answer.styl begin */
+.uni-answer__item + .uni-answer__tabs {
+  margin-top: -17px;
+}
+.uni-answer_in-card_yes .uni-answer__item:last-child {
+  margin-bottom: 0;
+}
+.uni-answer_in-card_yes {
+  margin-bottom: 20px;
+}
+
+/* ../../blocks-desktop/uni-answer/uni-answer.styl end */
+/* ../../blocks-common/serp-list/_left/serp-list_left_yes.styl begin */
+.serp-list_left_yes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.serp-list_left_yes .serp-item {
+  text-align: inherit;
+}
+
+/* ../../blocks-common/serp-list/_left/serp-list_left_yes.styl end */
+/* ../../node_modules/islands/common.blocks/popup2/_theme/popup2_theme_normal.css begin */
+/*
+ * 1. Предотвращает пропадание тени в iOS. https://st.yandex-team.ru/ISLCOMPONENTS-1710
+ */
+
+.popup2_theme_normal {
+    visibility: hidden;
+
+    -moz-box-sizing: border-box;
+
+    box-sizing: border-box;
+    margin: -9999px 0 0 -9999px;
+
+    border: 1px solid rgba(0,0,0,.06);
+
+    -webkit-animation-duration: .1s;
+
+    animation-duration: .1s;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+
+    -webkit-animation-fill-mode: forwards;
+
+    animation-fill-mode: forwards;
+}
+
+.popup2_theme_normal .popup2__tail:before {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    bottom: 0;
+    left: 0;
+
+    content: '';
+
+    border: 1px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, .06);
+    border-left-color: rgba(0, 0, 0, .06);
+}
+
+.popup2_theme_normal .popup2__tail:after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 1px;
+    left: 1px;
+
+    content: '';
+
+    background-image: linear-gradient(to top right, #fff 50%, transparent 50%);
+}
+
+.popup2_theme_normal:before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    content: '';
+
+    border-radius: .1px; /*1*/
+    background: #fff;
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,.4);
+}
+
+/* NOTE: ISL-5672 */
+.popup2_theme_normal.popup2_visible_yes:before {
+    z-index: -1;
+}
+
+.popup2_theme_normal.popup2_js_inited {
+    display: block;
+}
+
+.popup2_theme_normal.popup2_visible_yes {
+    visibility: visible;
+
+    margin: 0;
+}
+
+.popup2_theme_normal.popup2_direction_bottom-left,
+.popup2_theme_normal.popup2_direction_bottom-center,
+.popup2_theme_normal.popup2_direction_bottom-right {
+    -webkit-animation-name: popup2_theme_normal_bottom;
+    animation-name: popup2_theme_normal_bottom;
+}
+
+.popup2_theme_normal.popup2_direction_bottom-left.popup2_visible_yes,
+.popup2_theme_normal.popup2_direction_bottom-center.popup2_visible_yes,
+.popup2_theme_normal.popup2_direction_bottom-right.popup2_visible_yes {
+    -webkit-animation-name: popup2_theme_normal_bottom_visible;
+    animation-name: popup2_theme_normal_bottom_visible;
+}
+
+.popup2_theme_normal.popup2_direction_top-left,
+.popup2_theme_normal.popup2_direction_top-center,
+.popup2_theme_normal.popup2_direction_top-right {
+    -webkit-animation-name: popup2_theme_normal_top;
+    animation-name: popup2_theme_normal_top;
+}
+
+.popup2_theme_normal.popup2_direction_top-left.popup2_visible_yes,
+.popup2_theme_normal.popup2_direction_top-center.popup2_visible_yes,
+.popup2_theme_normal.popup2_direction_top-right.popup2_visible_yes {
+    -webkit-animation-name: popup2_theme_normal_top_visible;
+    animation-name: popup2_theme_normal_top_visible;
+}
+
+.popup2_theme_normal.popup2_direction_right-top,
+.popup2_theme_normal.popup2_direction_right-center,
+.popup2_theme_normal.popup2_direction_right-bottom {
+    -webkit-animation-name: popup2_theme_normal_right;
+    animation-name: popup2_theme_normal_right;
+}
+
+.popup2_theme_normal.popup2_direction_right-top.popup2_visible_yes,
+.popup2_theme_normal.popup2_direction_right-center.popup2_visible_yes,
+.popup2_theme_normal.popup2_direction_right-bottom.popup2_visible_yes {
+    -webkit-animation-name: popup2_theme_normal_right_visible;
+    animation-name: popup2_theme_normal_right_visible;
+}
+
+.popup2_theme_normal.popup2_direction_left-top,
+.popup2_theme_normal.popup2_direction_left-center,
+.popup2_theme_normal.popup2_direction_left-bottom {
+    -webkit-animation-name: popup2_theme_normal_left;
+    animation-name: popup2_theme_normal_left;
+}
+
+.popup2_theme_normal.popup2_direction_left-top.popup2_visible_yes,
+.popup2_theme_normal.popup2_direction_left-center.popup2_visible_yes,
+.popup2_theme_normal.popup2_direction_left-bottom.popup2_visible_yes {
+    -webkit-animation-name: popup2_theme_normal_left_visible;
+    animation-name: popup2_theme_normal_left_visible;
+}
+
+@-webkit-keyframes popup2_theme_normal_bottom {
+    0% {
+        visibility: visible;
+
+        margin: 0;
+
+        opacity: 1;
+
+        -webkit-transform: translateY(0);
+
+        transform: translateY(0);
+    }
+    99% {
+        margin: 0;
+
+        -webkit-transform: translateY(10px);
+
+        transform: translateY(10px);
+    }
+    100% {
+        visibility: hidden;
+
+        margin: -9999px 0 0 -9999px;
+
+        opacity: 0;
+    }
+}
+
+@keyframes popup2_theme_normal_bottom {
+    0% {
+        visibility: visible;
+
+        margin: 0;
+
+        opacity: 1;
+
+        -webkit-transform: translateY(0);
+
+        transform: translateY(0);
+    }
+    99% {
+        margin: 0;
+
+        -webkit-transform: translateY(10px);
+
+        transform: translateY(10px);
+    }
+    100% {
+        visibility: hidden;
+
+        margin: -9999px 0 0 -9999px;
+
+        opacity: 0;
+    }
+}
+@-webkit-keyframes popup2_theme_normal_bottom_visible {
+    0% {
+        opacity: 0;
+
+        -webkit-transform: translateY(10px);
+
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+
+        -webkit-transform: translateY(0);
+
+        transform: translateY(0);
+    }
+}
+@keyframes popup2_theme_normal_bottom_visible {
+    0% {
+        opacity: 0;
+
+        -webkit-transform: translateY(10px);
+
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+
+        -webkit-transform: translateY(0);
+
+        transform: translateY(0);
+    }
+}
+@-webkit-keyframes popup2_theme_normal_top {
+    0% {
+        visibility: visible;
+
+        margin: 0;
+
+        opacity: 1;
+
+        -webkit-transform: translateY(0);
+
+        transform: translateY(0);
+    }
+    99% {
+        margin: 0;
+
+        -webkit-transform: translateY(-10px);
+
+        transform: translateY(-10px);
+    }
+    100% {
+        visibility: hidden;
+
+        margin: -9999px 0 0 -9999px;
+
+        opacity: 0;
+    }
+}
+@keyframes popup2_theme_normal_top {
+    0% {
+        visibility: visible;
+
+        margin: 0;
+
+        opacity: 1;
+
+        -webkit-transform: translateY(0);
+
+        transform: translateY(0);
+    }
+    99% {
+        margin: 0;
+
+        -webkit-transform: translateY(-10px);
+
+        transform: translateY(-10px);
+    }
+    100% {
+        visibility: hidden;
+
+        margin: -9999px 0 0 -9999px;
+
+        opacity: 0;
+    }
+}
+@-webkit-keyframes popup2_theme_normal_top_visible {
+    0% {
+        opacity: 0;
+
+        -webkit-transform: translateY(-10px);
+
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+
+        -webkit-transform: translateY(0);
+
+        transform: translateY(0);
+    }
+}
+@keyframes popup2_theme_normal_top_visible {
+    0% {
+        opacity: 0;
+
+        -webkit-transform: translateY(-10px);
+
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+
+        -webkit-transform: translateY(0);
+
+        transform: translateY(0);
+    }
+}
+@-webkit-keyframes popup2_theme_normal_right {
+    0% {
+        visibility: visible;
+
+        margin: 0;
+
+        opacity: 1;
+
+        -webkit-transform: translateX(0);
+
+        transform: translateX(0);
+    }
+    99% {
+        margin: 0;
+
+        -webkit-transform: translateX(10px);
+
+        transform: translateX(10px);
+    }
+    100% {
+        visibility: hidden;
+
+        margin: -9999px 0 0 -9999px;
+
+        opacity: 0;
+    }
+}
+@keyframes popup2_theme_normal_right {
+    0% {
+        visibility: visible;
+
+        margin: 0;
+
+        opacity: 1;
+
+        -webkit-transform: translateX(0);
+
+        transform: translateX(0);
+    }
+    99% {
+        margin: 0;
+
+        -webkit-transform: translateX(10px);
+
+        transform: translateX(10px);
+    }
+    100% {
+        visibility: hidden;
+
+        margin: -9999px 0 0 -9999px;
+
+        opacity: 0;
+    }
+}
+@-webkit-keyframes popup2_theme_normal_right_visible {
+    0% {
+        opacity: 0;
+
+        -webkit-transform: translateX(10px);
+
+        transform: translateX(10px);
+    }
+    100% {
+        opacity: 1;
+
+        -webkit-transform: translateX(0);
+
+        transform: translateX(0);
+    }
+}
+@keyframes popup2_theme_normal_right_visible {
+    0% {
+        opacity: 0;
+
+        -webkit-transform: translateX(10px);
+
+        transform: translateX(10px);
+    }
+    100% {
+        opacity: 1;
+
+        -webkit-transform: translateX(0);
+
+        transform: translateX(0);
+    }
+}
+@-webkit-keyframes popup2_theme_normal_left {
+    0% {
+        visibility: visible;
+
+        margin: 0;
+
+        opacity: 1;
+
+        -webkit-transform: translateX(0);
+
+        transform: translateX(0);
+    }
+    99% {
+        margin: 0;
+
+        -webkit-transform: translateX(-10px);
+
+        transform: translateX(-10px);
+    }
+    100% {
+        visibility: hidden;
+
+        margin: -9999px 0 0 -9999px;
+
+        opacity: 0;
+    }
+}
+@keyframes popup2_theme_normal_left {
+    0% {
+        visibility: visible;
+
+        margin: 0;
+
+        opacity: 1;
+
+        -webkit-transform: translateX(0);
+
+        transform: translateX(0);
+    }
+    99% {
+        margin: 0;
+
+        -webkit-transform: translateX(-10px);
+
+        transform: translateX(-10px);
+    }
+    100% {
+        visibility: hidden;
+
+        margin: -9999px 0 0 -9999px;
+
+        opacity: 0;
+    }
+}
+@-webkit-keyframes popup2_theme_normal_left_visible {
+    0% {
+        opacity: 0;
+
+        -webkit-transform: translateX(-10px);
+
+        transform: translateX(-10px);
+    }
+    100% {
+        opacity: 1;
+
+        -webkit-transform: translateX(0);
+
+        transform: translateX(0);
+    }
+}
+@keyframes popup2_theme_normal_left_visible {
+    0% {
+        opacity: 0;
+
+        -webkit-transform: translateX(-10px);
+
+        transform: translateX(-10px);
+    }
+    100% {
+        opacity: 1;
+
+        -webkit-transform: translateX(0);
+
+        transform: translateX(0);
+    }
+}
+
+/* ../../node_modules/islands/common.blocks/popup2/_theme/popup2_theme_normal.css end */
+/* ../../construct/blocks-desktop/click/click.styl begin */
+.click {
+  cursor: pointer;
+}
+
+/* ../../construct/blocks-desktop/click/click.styl end */
+/* ../../construct/blocks-deskpad/supply/__chat/supply__chat.styl begin */
+.supply__chat_chat-with-time_yes.button2_has-caption.button2_theme_default.button2_size_m {
+  height: auto;
+}
+.supply__chat_chat-with-time_yes.button2_has-caption.button2_theme_default.button2_size_m .button2__text {
+  padding: 4px 0;
+}
+.supply__chat_chat-with-time_yes.button2_has-caption.button2_theme_default.button2_size_m .button2__text .button2__caption-title {
+  line-height: 16px;
+  font-weight: normal;
+}
+.supply__chat_chat-with-time_yes.button2_has-caption.button2_theme_default.button2_size_m .button2__text .button2__caption-subtitle {
+  line-height: 12px;
+}
+
+/* ../../construct/blocks-deskpad/supply/__chat/supply__chat.styl end */
+/* ../../construct/blocks-desktop/supply/__chat/supply__chat.styl begin */
+.supply__chat_with-online-status ~ .button-with-label__label {
+  display: inline-block;
+  margin: 0 0 0 5px;
+  text-transform: lowercase;
+}
+.supply__chat_with-online-status ~ .button-with-label__label .chat-status {
+  text-transform: initial;
+}
+
+/* ../../construct/blocks-desktop/supply/__chat/supply__chat.styl end */
+/* ../../blocks-deskpad/serp/__spin/serp__spin.styl begin */
+.serp__spin {
+  position: fixed;
+  z-index: 9;
+  top: 0;
+  right: 0;
+  display: block;
+  width: 0;
+  height: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  opacity: 0.1;
+  background: #fff;
+}
+.serp__spin_progress_yes {
+  bottom: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  transition: opacity 0.3s;
+  opacity: 0.8;
+}
+
+/* ../../blocks-deskpad/serp/__spin/serp__spin.styl end */
+/* ../../blocks-desktop/serp/__spin/serp__spin.styl begin */
+.serp__spin_progress_yes {
+/* ширина левой колонки + половина ширины выдачи - половина ширины спина */
+  padding-left: 400px;
+}
+
+/* ../../blocks-desktop/serp/__spin/serp__spin.styl end */
+/* ../../blocks-deskpad/no-connection/no-connection.styl begin */
+.no-connection {
+  display: none;
+  text-align: center;
+  vertical-align: middle;
+}
+.no-connection_visible_yes {
+  display: table-cell;
+}
+.no-connection__wrapper {
+  font-size: 16px;
+  line-height: 22px;
+  position: relative;
+  display: inline-block;
+  padding: 14px 0 81px 144px;
+  background: no-repeat 0 -12px url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 width%3D%22128%22 height%3D%22128%22 viewBox%3D%220 0 102 102%22%3E%3Cpath d%3D%22M51.2 11.39c-.34.01-.68.04-1.02.12-2.33.48-4 2.35-5.14 4.35-10.94 18.97-21.9 37.93-32.85 56.9-1 1.75-2.21 3.49-2.48 5.54-.32 1.95.33 4.07 1.83 5.38 1.55 1.44 3.75 1.87 5.81 1.85 21.92-.01 43.84 0 65.76 0 2.25-.01 4.65.17 6.7-.92 2.06-.99 3.39-3.25 3.26-5.53-.04-2.32-1.38-4.31-2.5-6.25-10.66-18.46-21.32-36.91-31.97-55.4-.95-1.64-1.83-3.4-3.33-4.62-1.13-.94-2.6-1.49-4.08-1.46m.15 2.39c1.76-.01 3.24 1.46 4.06 2.95l34.2 59.2c.91 1.51 1.61 3.48.7 5.15-.92 1.66-2.98 2.11-4.73 2.08-22.72 0-45.4 0-68.2.01-1.77.04-3.87-.35-4.86-2-.94-1.61-.32-3.59.57-5.08 11.39-19.72 22.77-39.44 34.2-59.2.76-1.31 1.82-2.62 3.36-2.99.26-.06.52-.1.77-.1m-2.81 17.66c1.33-1.27 3.55-1.4 4.95-.16 1.88 1.13 2.36 3.51 2.32 5.54-1.3 10.1-2.04 20.2-3.09 30.3h-3.19c-1.05-10.22-1.86-20.48-3.12-30.67.1-1.81.48-3.9 2.13-4.96m1.5 38.93c2.25-.91 4.83 1.42 4.15 3.75-.45 2.34-3.71 3.27-5.33 1.53-1.69-1.52-1-4.62 1.18-5.28%22 fill%3D%22%23adadab%22%2F%3E%3C%2Fsvg%3E");
+}
+.no-connection__reload.no-connection__reload {
+  position: absolute;
+  bottom: 38px;
+  left: 144px;
+}
+
+/* ../../blocks-deskpad/no-connection/no-connection.styl end */
+/* ../../blocks-desktop/pager/pager.styl begin */
+.pager {
+  margin-bottom: 26px;
+}
+
+/* ../../blocks-desktop/pager/pager.styl end */
+/* ../../blocks-deskpad/pager/__item/pager__item.styl begin */
+.pager__item {
+  font-size: 18px;
+  line-height: 38px;
+  display: inline-block;
+  min-width: 38px;
+  text-align: center;
+  color: #333;
+}
+.pager__item_kind_page {
+  position: relative;
+  margin: 0 4px;
+  border-radius: 19px;
+}
+.pager__item_kind_page:first-child {
+  margin-left: -4px;
+}
+.pager__item_kind_next {
+  padding-right: 20px;
+  padding-left: 16px;
+}
+.pager__item_kind_begin {
+  padding-right: 16px;
+}
+.pager__item_current_yes {
+  cursor: default;
+  background: #ffeba0;
+}
+
+/* ../../blocks-deskpad/pager/__item/pager__item.styl end */
+/* ../../blocks-desktop/pager/__item/pager__item.styl begin */
+.pager__item_kind_page.link_hovered_yes {
+  background: rgba(0,0,0,0.06);
+}
+
+/* ../../blocks-desktop/pager/__item/pager__item.styl end */
+/* ../../blocks-deskpad/related/related.styl begin */
+.related {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.related__query {
+  font-weight: bold;
+}
+.related__header {
+  font-weight: normal;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+.related__column {
+  display: inline-block;
+  min-width: 130px;
+  vertical-align: top;
+}
+.related__item {
+  font-size: 13px;
+  line-height: 16px;
+  margin-top: 6px;
+  margin-right: 20px;
+/* инвертируем подсветку highlighter'a */
+  font-weight: bold;
+}
+.related__item b {
+  font-weight: normal;
+}
+.related__item:first-of-type {
+  margin-top: 0;
+}
+
+/* ../../blocks-deskpad/related/related.styl end */
+/* ../../blocks-desktop/related/related.styl begin */
+.related {
+  margin-bottom: 20px;
+}
+.related__header {
+  font-size: 16px;
+}
+.related__column {
+  margin-bottom: 6px;
+}
+
+/* ../../blocks-desktop/related/related.styl end */
+/* ../../blocks-common/competitors/competitors.styl begin */
+.competitors {
+  line-height: 30px;
+}
+.competitors__list {
+  font-weight: bold;
+}
+.competitors__link {
+  color: #999;
+}
+
+/* ../../blocks-common/competitors/competitors.styl end */
+/* ../../blocks-deskpad/competitors/competitors.styl begin */
+.competitors_pos_bottom {
+  position: absolute;
+  bottom: 6px;
+}
+.competitors__link {
+  margin-left: 16px;
+}
+.competitors__link:first-child {
+  position: relative;
+  margin-left: 0;
+  padding-left: 26px;
+}
+.competitors__link:first-child::after {
+  position: absolute;
+  top: -1px;
+  left: 1px;
+  width: 16px;
+  height: 16px;
+  content: '';
+  opacity: 0.45;
+  background: url("/static/web4/freeze/6YksZCWR-H4oXRFZMUXnNzqmVx0.svg") 0 0 no-repeat;
+  background-size: 16px;
+}
+
+/* ../../blocks-deskpad/competitors/competitors.styl end */
+/* ../../blocks-desktop/competitors/competitors.styl begin */
+.competitors__link {
+  transition: color 0.2s;
+}
+.competitors__link:first-child::after {
+  transition: opacity 0.2s;
+}
+.competitors__link.link_hovered_yes {
+  color: #000;
+}
+.competitors__link.link_hovered_yes::after {
+  opacity: 1;
+}
+
+/* ../../blocks-desktop/competitors/competitors.styl end */
+/* ../../blocks-deskpad/region-change/__popup/region-change__popup.styl begin */
+.region-change__popup {
+  padding: 4px 0;
+}
+.region-change__separator {
+  margin: 4px;
+  border-top: 1px solid #ccc;
+}
+.region-change__item {
+  display: block;
+  padding: 3px 12px;
+  color: #333;
+}
+
+/* ../../blocks-deskpad/region-change/__popup/region-change__popup.styl end */
+/* ../../blocks-desktop/region-change/__popup/region-change__popup.styl begin */
+.region-change__item:hover {
+  background: #ffeca1;
+}
+
+/* ../../blocks-desktop/region-change/__popup/region-change__popup.styl end */
+/* ../../blocks-deskpad/sprite/sprite.styl begin */
+.advanced-search .input__clear[class],
+.feedback .popup__close,
+.ugc-modal .popup__close {
+  background-image: url("/static/web4/freeze/LthL8YYlqfhygfTe5IR0qpXE1oU.svg");
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+.feedback .popup__close,
+.ugc-modal .popup__close {
+  background-position: -179px -17px;
+}
+.advanced-search .input__clear {
+  background-position: -179px -50px;
+}
+
+/* ../../blocks-deskpad/sprite/sprite.styl end */
+/* ../../blocks-common/typo/typo.styl begin */
+.typo {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ../../blocks-common/typo/typo.styl end */
+/* ../../blocks-common/typo/_line/typo_line_l.styl begin */
+.typo_line_l.typo_text_m {
+  line-height: 1em;
+}
+
+/* ../../blocks-common/typo/_line/typo_line_l.styl end */
+/* ../../blocks-common/typo/_line/typo_line_m.styl begin */
+.typo_line_m {
+  line-height: 1em;
+}
+.typo_line_m.typo_text_s {
+  line-height: 15px;
+}
+.typo_line_m.typo_text_m {
+  line-height: 17px;
+}
+.typo_line_m.typo_text_l {
+  line-height: 24px;
+}
+.typo_line_m.typo_text_xl {
+  line-height: 32px;
+}
+.typo_line_m.typo_text_xxl {
+  line-height: 34px;
+}
+
+/* ../../blocks-common/typo/_line/typo_line_m.styl end */
+/* ../../blocks-common/typo/_line/typo_line_s.styl begin */
+.typo_line_s {
+  line-height: 1em;
+}
+.typo_line_s.typo_text_s,
+.typo_line_s.typo_text_xl {
+  line-height: 1em;
+}
+.typo_line_s.typo_text_m {
+  line-height: 16px;
+}
+.typo_line_s.typo_text_l {
+  line-height: 1em;
+}
+
+/* ../../blocks-common/typo/_line/typo_line_s.styl end */
+/* ../../blocks-common/typo/_text/typo_text_l.styl begin */
+.typo_text_l {
+  font-size: 18px;
+  line-height: 1em;
+}
+
+/* ../../blocks-common/typo/_text/typo_text_l.styl end */
+/* ../../blocks-common/typo/_text/typo_text_m.styl begin */
+.typo_text_m {
+  font-size: 13px;
+  line-height: 1em;
+}
+
+/* ../../blocks-common/typo/_text/typo_text_m.styl end */
+/* ../../blocks-common/typo/_text/typo_text_s.styl begin */
+.typo_text_s {
+  font-size: 11px;
+  line-height: 1em;
+}
+
+/* ../../blocks-common/typo/_text/typo_text_s.styl end */
+/* ../../blocks-common/typo/_text/typo_text_xl.styl begin */
+.typo_text_xl {
+  font-size: 28px;
+  line-height: 1em;
+}
+
+/* ../../blocks-common/typo/_text/typo_text_xl.styl end */
+/* ../../blocks-common/typo/_text/typo_text_xxl.styl begin */
+.typo_text_xxl {
+  font-size: 32px;
+  line-height: 1em;
+}
+
+/* ../../blocks-common/typo/_text/typo_text_xxl.styl end */
+/* ../../blocks-common/typo/_type/typo_type_bold.styl begin */
+.typo_type_bold {
+  font-weight: bold;
+}
+
+/* ../../blocks-common/typo/_type/typo_type_bold.styl end */
+/* ../../blocks-common/typo/_type/typo_type_caps.styl begin */
+.typo_type_caps {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ../../blocks-common/typo/_type/typo_type_caps.styl end */
+/* ../../blocks-common/typo/_type/typo_type_greenurl.styl begin */
+.typo_type_greenurl {
+  font-size: 14px;
+  line-height: 17px;
+}
+
+/* ../../blocks-common/typo/_type/typo_type_greenurl.styl end */
+/* ../../blocks-common/typo/_type/typo_type_italic.styl begin */
+.typo_type_italic {
+  font-style: italic;
+}
+
+/* ../../blocks-common/typo/_type/typo_type_italic.styl end */

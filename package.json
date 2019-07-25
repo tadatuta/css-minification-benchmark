@@ -30,15 +30,15 @@
   "main": "lib/bench.js",
   "dependencies": {},
   "devDependencies": {
-    "clean-css": "4.1.x",
+    "clean-css": "^4.2.1",
     "cli-table": "0.3.x",
     "colors": "1.1.x",
-    "crass": "0.11.x",
-    "cssnano": "3.10.x",
-    "csso": "3.4.x",
-    "csswring": "6.0.x",
+    "crass": "^0.12.3",
+    "cssnano": "^4.1.10",
+    "csso": "^3.5.1",
+    "csswring": "^7.0.0",
     "eslint": "4.11.x",
-    "gzip-size": "4.0.x",
+    "gzip-size": "^5.1.1",
     "q": "1.5.x"
   },
   "files": [
